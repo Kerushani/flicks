@@ -1,0 +1,110 @@
+/* Global font and background */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: #1d3c55;  /* Dark blue text color */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Notes section heading */
+  .notes-section {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .notes-section h2 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #1e2a47;  /* Dark blue for headings */
+  }
+  
+  /* Individual note styling */
+  .note {
+    background-color: #ffffff;
+    border: 1px solid #d1d9e6;  /* Light blue border */
+    margin: 16px auto;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .note:hover {
+    background-color: #f4f8fd;  /* Very light blue hover effect */
+  }
+  
+  /* Title and content within note */
+  .note-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #1d3c55;  /* Dark blue title */
+  }
+  
+  .note-content {
+    font-size: 15px;
+    color: #3b4f70;  /* Softer blue-grey for content */
+    line-height: 1.6;
+  }
+  
+  /* Note creation form */
+  form {
+    background-color: #ffffff;
+    padding: 28px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    max-width: 500px;
+    margin: 40px auto;
+  }
+  
+  form h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #1d3c55;  /* Dark blue for form header */
+    text-align: center;
+  }
+  
+  /* Form fields */
+  form label {
+    font-weight: 500;
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    color: #1d3c55;  /* Dark blue label */
+  }
+  
+  form input,
+  form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #c1cbe3;  /* Soft blue border */
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #fafbfc;  /* Very light blue background */
+    transition: border-color 0.2s ease;
+  }
+  
+  form input:focus,
+  form textarea:focus {
+    border-color: #1d3c55;  /* Dark blue focus border */
+    outline: none;
+  }
+  
+  /* Submit button */
+  form input[type="submit"] {
+    background-color: #1d3c55;  /* Dark blue background */
+    color: #ffffff;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 20px;
+    transition: background-color 0.2s ease;
+  }
+  
+  form input[type="submit"]:hover {
+    background-color: #162e44;  /* Darker blue on hover */
+  }
+  

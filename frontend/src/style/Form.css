@@ -1,0 +1,62 @@
+/* Form container style */
+.form-container {
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 50px auto;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 420px;
+  background: #ffffff;  /* White background for the form */
+  transition: transform 0.3s ease;
+}
+
+/* Form hover effect */
+.form-container:hover {
+  transform: scale(1.02);  /* Slight scale on hover */
+}
+
+/* Form input style */
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 12px 0;
+  border: 1px solid #c1cbe3; /* Light blue border */
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+  background-color: #f7f9fc;  /* Very light blue background */
+  color: #1d3c55;  /* Dark blue text color */
+  transition: border 0.2s ease;
+}
+
+/* Input focus state */
+.form-input:focus {
+  border-color: #1d3c55; /* Dark blue border on focus */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(29, 60, 85, 0.2); /* Light dark blue glow */
+}
+
+/* Submit button styling */
+.form-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background: #1d3c55; /* Dark blue background */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Button hover effect */
+.form-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(29, 60, 85, 0.2);  /* Dark blue shadow on hover */
+}
