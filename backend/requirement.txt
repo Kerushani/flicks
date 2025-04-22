@@ -1,6 +1,7 @@
 asgiref==3.8.1
 Brotli==1.1.0
 click==8.1.8
+dj-database-url==2.3.0
 Django==5.2
 django-cors-headers==4.7.0
 djangorestframework==3.16.0
@@ -13,6 +14,6 @@ PyJWT==2.9.0
 python-dotenv==1.1.0
 pytz==2025.2
 sqlparse==0.5.3
+typing_extensions==4.13.2
 uvicorn==0.34.2
 whitenoise==6.9.0
-dj-database-url
