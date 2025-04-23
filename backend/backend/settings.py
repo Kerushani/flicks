@@ -109,20 +109,20 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # }
 
 # local db - uncomment when running locally
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "mydatabase",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "mydatabase",
+#     }
+# }
 
 # prod - db -- uncomment when pushing code
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=os.environ.get("DB_URL"), 
-#         conn_max_age=600
-#     )
-# }
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get("DB_URL"), 
+        conn_max_age=600
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
