@@ -3,57 +3,88 @@ import api from "../api"
 import Note from "../components/Note"
 import "../style/Home.css"
 
-function Home(){
-    const [notes, setNotes] = useState([]);
-    const [content, setContent] = useState("");
-    const [title, setTitle] = useState("")
+function Home() {
+    const [orders, setOrders] = useState([]);
+    const [orderDetails, setOrderDetails] = useState("");
+    const [customerName, setCustomerName] = useState("")
 
     useEffect(() => {
-        getNotes();
+        getOrders();
     }, [])
 
-    const getNotes = () => {
-        api.get("/api/notes/")
+    const getOrders = () => {
+        api.get("/api/notes/") // Replace with /api/orders/ later
         .then((res) => res.data)
-        .then((data) => {setNotes(data); console.log(data)})
-        .catch((err) => alert(err))
+        .then((data) => {
+            setOrders(data)
+            console.log(data)
+        })
+        .catch((err) => alert("Failed to fetch orders."))
     }
 
-    const deleteNote = (id) => {
+    const deleteOrder = (id) => {
         api.delete(`/api/notes/delete/${id}`).then((res) => {
-            if (res.status === 204) alert("Note was deleted!")
-            else alert("Failed to delete note.")
-            getNotes();
-        }).catch((error) => alert(error))
+            if (res.status !== 204) alert("Failed to remove order.")
+            getOrders();
+        }).catch((error) => alert("Error deleting order."))
     };
 
-    const createNote = (e) => {
+    const createOrder = (e) => {
         e.preventDefault()
-        api.post("/api/notes/", {content, title}).then((res) => {
-            if (res.status===201) alert("Notes created!")
-                else alert("Failed to make alert!")
-            getNotes();
-        }).catch((error) => alert(error))
+        api.post("/api/notes/", {
+            title: customerName,
+            content: orderDetails
+        }).then((res) => {
+            if (res.status === 201) alert("Order added to the queue!")
+            else alert("Failed to submit order.")
+            getOrders();
+        }).catch((error) => alert("Error submitting order."))
     }
 
-    return <div>
-        <div>
-            <h2>Notes</h2>
-            {notes.map((note) => <Note note={note} onDelete={deleteNote} key={note.id} />)}
+    return (
+        <div className="home-page">
+            <header className="cafe-header">
+                <h1>☕ Cozy Café Orders</h1>
+                <p className="subtitle">Barista Dashboard – track & manage incoming orders</p>
+            </header>
+
+            <section className="orders-section">
+                <h2>📋 Current Orders</h2>
+                {orders.length > 0 ? (
+                    orders.map((order) => (
+                        <Note note={order} onDelete={deleteOrder} key={order.id} />
+                    ))
+                ) : (
+                    <p className="empty-text">No orders yet. Time for a coffee break!</p>
+                )}
+            </section>
+
+            <section className="new-order-section">
+                <h2>➕ Add New Order</h2>
+                <form onSubmit={createOrder}>
+                    <label htmlFor="customerName">Customer Name:</label>
+                    <input
+                        type="text"
+                        id="customerName"
+                        required
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        value={customerName}
+                    />
+
+                    <label htmlFor="orderDetails">Order (e.g., Latte w/ almond milk, no foam):</label>
+                    <textarea
+                        id="orderDetails"
+                        name="orderDetails"
+                        required
+                        value={orderDetails}
+                        onChange={(e) => setOrderDetails(e.target.value)}
+                    ></textarea>
+
+                    <input type="submit" value="Add to Queue" />
+                </form>
+            </section>
         </div>
-        <h2>Create a Note</h2>
-        <form onSubmit={createNote}>
-            <label htmlFor="title">Title:</label>
-        <br />
-        <input type="text" id="title" required onChange={(e)=> setTitle(e.target.value)} value={title}/>
-        <br />
-        <label htmlFor="content">Content</label>
-        <br />
-        <textarea id="content" name="content" required value={content} onChange={(e)=> setContent(e.target.value)}></textarea>
-        <br />
-        <input type="submit" value="Submit"></input>
-        </form>
-    </div>
+    )
 }
 
 export default Home
