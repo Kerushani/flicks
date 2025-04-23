@@ -1,19 +1,19 @@
 /* Note container styling */
 .note-container {
   font-family: 'Roboto', sans-serif;
-  background-color: #f3eee5; /* Light cream background */
+  background-color: #f3eee5; 
   padding: 20px;
   margin: 20px 0;
-  border: 1px solid #d3b8a3; /* Light tan border */
+  border: 1px solid #d3b8a3;
   border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(140, 90, 50, 0.1); /* Subtle warm shadow */
+  box-shadow: 0 6px 16px rgba(140, 90, 50, 0.1); 
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Hover effect for note container */
 .note-container:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(140, 90, 50, 0.2); /* Deeper warm shadow */
+  box-shadow: 0 10px 24px rgba(140, 90, 50, 0.2);
 }
 
 /* Note title styling */

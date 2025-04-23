@@ -1,7 +1,7 @@
 /* Global font and background */
 body {
   font-family: 'Georgia', serif;
-  background-color: #f8f4ec; /* Light cream/latte tone */
+  background-color: #f8f4ec;
   color: #4b2e1d; /* Coffee brown */
   margin: 0;
   padding: 0;
@@ -51,7 +51,7 @@ body {
 
 /* Note creation form */
 form {
-  background-color: #fffdf9; /* Soft cream */
+  background-color: #fffdf9;
   padding: 28px;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(80, 50, 30, 0.08);
@@ -83,7 +83,7 @@ form textarea {
   border: 1px solid #c7a98d; /* Soft caramel border */
   border-radius: 6px;
   font-size: 15px;
-  background-color: #fefbf8; /* Café cream */
+  background-color: #fefbf8; 
   transition: border-color 0.2s ease;
 }
 
@@ -146,3 +146,15 @@ form input[type="submit"]:hover {
   font-style: italic;
   padding: 20px 0;
 }
+
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  padding: 20px;           
+  overflow-y: auto;        
+  max-width: 100%;          
+  margin-left: 20px;       
+}
+
