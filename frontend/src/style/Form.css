@@ -8,28 +8,26 @@
   margin: 50px auto;
   padding: 30px;
   border-radius: 16px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  /* box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);  */
   max-width: 420px;
-  background: #ffffff;  /* White background for the form */
+  background: #ffffff;  
   transition: transform 0.3s ease;
 }
 
-/* Form hover effect */
 .form-container:hover {
-  transform: scale(1.02);  /* Slight scale on hover */
+  transform: scale(1.02); 
 }
 
-/* Form input style */
 .form-input {
   width: 100%;
   padding: 12px 15px;
   margin: 12px 0;
-  border: 1px solid #c1cbe3; /* Light blue border */
+  border: 1px solid #c1cbe3; 
   border-radius: 8px;
   box-sizing: border-box;
   font-size: 16px;
-  background-color: #f7f9fc;  /* Very light blue background */
-  color: #1d3c55;  /* Dark blue text color */
+  background-color: #f7f9fc;  
+  color: #1d3c55;  
   transition: border 0.2s ease;
 }
 

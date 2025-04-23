@@ -64,7 +64,7 @@
   
   .menu-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Two columns */
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
   

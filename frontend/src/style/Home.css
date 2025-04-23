@@ -112,9 +112,9 @@ form input[type="submit"]:hover {
 
 .home-page {
   padding: 40px 20px;
+  padding-left: 200px;
   max-width: 900px;
   margin: auto;
-  background-color: #fefcf8;
 }
 
 .cafe-header {
