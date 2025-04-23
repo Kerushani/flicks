@@ -1,10 +1,12 @@
+// App.jsx
 import React from "react"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
-import Home from "./pages/Home"
 import NotFound from "./pages/NotFound"
 import ProtectedRoute from "./components/ProtectedRoute"
+import Home from "./pages/Home"
+import Welcome from "./pages/Welcome"
 import ActiveOrders from "./pages/ActiveOrders"
 import Menu from "./pages/Menu"
 import OrderHistory from "./pages/OrderHistory"
@@ -23,6 +25,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* PROTECTED ROUTES */}
         <Route
           path="/"
           element={
@@ -31,13 +34,13 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* Nested routes rendered in <Outlet /> inside Home */}
-          <Route index element={<ActiveOrders />} />
+          <Route index element={<Welcome />} />
           <Route path="active-orders" element={<ActiveOrders />} />
           <Route path="menu" element={<Menu />} />
           <Route path="order-history" element={<OrderHistory />} />
         </Route>
 
+        {/* PUBLIC ROUTES */}
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />

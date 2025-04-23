@@ -150,11 +150,41 @@ form input[type="submit"]:hover {
 .main-content {
   flex-grow: 1;
   display: flex;
-  justify-content: center; 
-  align-items: center;     
-  padding: 20px;           
-  overflow-y: auto;        
-  max-width: 100%;          
-  margin-left: 20px;       
+  justify-content: center; /* Horizontally centers content */
+  align-items: center;     /* Vertically centers content */
+  padding: 20px;
+  background-color: #f4f4f4;
+  overflow-y: auto;
 }
 
+.welcome-container {
+  text-align: center;
+  max-width: 800px;         /* Optional: limits the width of the content */
+  margin-top: 50px;         /* Optional: adds some space from the top */
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+  color: #ffdd57;           /* Bright color to match the cozy café theme */
+  margin-bottom: 20px;
+}
+
+.welcome-description {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.cta-button {
+  text-decoration: none;
+  background-color: #ffdd57;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #e0c340; /* Darker shade when hovered */
+}
