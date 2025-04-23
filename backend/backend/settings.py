@@ -108,9 +108,18 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     }
 # }
 
+# local db - uncomment when running locally
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "mydatabase",
+#     }
+# }
+
+# prod - db -- uncomment when pushing code
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get("DB_URL"),  # or just omit "default" if you always have it set
+        default=os.environ.get("DB_URL"), 
         conn_max_age=600
     )
 }

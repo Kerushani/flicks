@@ -1,61 +1,59 @@
 /* Note container styling */
 .note-container {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f7f9fc;  /* Light blue background */
-    padding: 20px;
-    margin: 20px 0;
-    border: 1px solid #c1cbe3;  /* Light blue border */
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(29, 60, 85, 0.1);  /* Subtle dark blue shadow */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  /* Hover effect for note container */
-  .note-container:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 24px rgba(29, 60, 85, 0.15); /* Darker shadow on hover */
-  }
-  
-  /* Note title styling */
-  .note-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #1d3c55;  /* Dark blue for title */
-    margin-bottom: 10px;
-  }
-  
-  /* Note content styling */
-  .note-content {
-    font-size: 1rem;
-    color: #1d3c55;  /* Dark blue content text */
-    margin-bottom: 12px;
-    line-height: 1.6;
-  }
-  
-  /* Note date styling */
-  .note-date {
-    font-size: 0.85rem;
-    color: #4f6b8c;  /* Muted dark blue for date */
-    font-style: italic;
-  }
-  
-  /* Delete button styling */
-  .delete-button {
-    background: linear-gradient(135deg, #1d3c55, #4f6b8c);  /* Dark blue gradient */
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: bold;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  /* Delete button hover effect */
-  .delete-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(29, 60, 85, 0.2);  /* Dark blue shadow on hover */
-  }
-  
-  
+  font-family: 'Roboto', sans-serif;
+  background-color: #f3eee5; 
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #d3b8a3;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(140, 90, 50, 0.1); 
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect for note container */
+.note-container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(140, 90, 50, 0.2);
+}
+
+/* Note title styling */
+.note-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #5c3a21; /* Rich coffee brown */
+  margin-bottom: 10px;
+}
+
+/* Note content styling */
+.note-content {
+  font-size: 1rem;
+  color: #4b2e1d; /* Dark roast brown */
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+/* Note date styling */
+.note-date {
+  font-size: 0.85rem;
+  color: #8c705f; /* Muted mocha tone */
+  font-style: italic;
+}
+
+/* Delete button styling */
+.delete-button {
+  background: linear-gradient(135deg, #7b4f35, #a37a60); /* Espresso to caramel gradient */
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Delete button hover effect */
+.delete-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(123, 79, 53, 0.3); /* Richer warm hover */
+}

@@ -1,110 +1,160 @@
 /* Global font and background */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f4f8;
-    color: #1d3c55;  /* Dark blue text color */
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Notes section heading */
-  .notes-section {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  .notes-section h2 {
-    font-size: 26px;
-    font-weight: 600;
-    color: #1e2a47;  /* Dark blue for headings */
-  }
-  
-  /* Individual note styling */
-  .note {
-    background-color: #ffffff;
-    border: 1px solid #d1d9e6;  /* Light blue border */
-    margin: 16px auto;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 600px;
-    transition: background-color 0.2s ease;
-  }
-  
-  .note:hover {
-    background-color: #f4f8fd;  /* Very light blue hover effect */
-  }
-  
-  /* Title and content within note */
-  .note-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #1d3c55;  /* Dark blue title */
-  }
-  
-  .note-content {
-    font-size: 15px;
-    color: #3b4f70;  /* Softer blue-grey for content */
-    line-height: 1.6;
-  }
-  
-  /* Note creation form */
-  form {
-    background-color: #ffffff;
-    padding: 28px;
-    border-radius: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    max-width: 500px;
-    margin: 40px auto;
-  }
-  
-  form h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #1d3c55;  /* Dark blue for form header */
-    text-align: center;
-  }
-  
-  /* Form fields */
-  form label {
-    font-weight: 500;
-    display: block;
-    margin-top: 16px;
-    margin-bottom: 6px;
-    color: #1d3c55;  /* Dark blue label */
-  }
-  
-  form input,
-  form textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #c1cbe3;  /* Soft blue border */
-    border-radius: 6px;
-    font-size: 15px;
-    background-color: #fafbfc;  /* Very light blue background */
-    transition: border-color 0.2s ease;
-  }
-  
-  form input:focus,
-  form textarea:focus {
-    border-color: #1d3c55;  /* Dark blue focus border */
-    outline: none;
-  }
-  
-  /* Submit button */
-  form input[type="submit"] {
-    background-color: #1d3c55;  /* Dark blue background */
-    color: #ffffff;
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 15px;
-    margin-top: 20px;
-    transition: background-color 0.2s ease;
-  }
-  
-  form input[type="submit"]:hover {
-    background-color: #162e44;  /* Darker blue on hover */
-  }
-  
+  font-family: 'Georgia', serif;
+  background-color: #f8f4ec;
+  color: #4b2e1d; /* Coffee brown */
+  margin: 0;
+  padding: 0;
+}
+
+/* Notes section heading */
+.notes-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.notes-section h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #5c3a21; /* Rich espresso */
+}
+
+/* Individual note styling */
+.note {
+  background-color: #fff9f3; /* Latte background */
+  border: 1px solid #d7b899; /* Tan border */
+  margin: 16px auto;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(110, 72, 40, 0.1); /* Soft warm shadow */
+  transition: background-color 0.2s ease;
+}
+
+.note:hover {
+  background-color: #f1e4d6; /* Warm beige on hover */
+}
+
+/* Title and content within note */
+.note-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #6e3b24; /* Cinnamon tone */
+}
+
+.note-content {
+  font-size: 15px;
+  color: #4e372c; /* Mocha */
+  line-height: 1.6;
+}
+
+/* Note creation form */
+form {
+  background-color: #fffdf9;
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(80, 50, 30, 0.08);
+  max-width: 500px;
+  margin: 40px auto;
+}
+
+/* Form header */
+form h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #5a3825; /* Deep coffee */
+  text-align: center;
+}
+
+/* Form fields */
+form label {
+  font-weight: 500;
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  color: #4a2f1f; /* Rich roast */
+}
+
+form input,
+form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #c7a98d; /* Soft caramel border */
+  border-radius: 6px;
+  font-size: 15px;
+  background-color: #fefbf8; 
+  transition: border-color 0.2s ease;
+}
+
+form input:focus,
+form textarea:focus {
+  border-color: #7b4f35; /* Espresso focus */
+  outline: none;
+}
+
+/* Submit button */
+form input[type="submit"] {
+  background-color: #7b4f35; /* Espresso */
+  color: #ffffff;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  margin-top: 20px;
+  transition: background-color 0.2s ease;
+}
+
+form input[type="submit"]:hover {
+  background-color: #5c3a21;
+}
+
+.home-page {
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: auto;
+  background-color: #fefcf8;
+}
+
+.cafe-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.cafe-header h1 {
+  font-size: 2.5rem;
+  color: #5a3825;
+  font-family: 'Georgia', serif;
+}
+
+.subtitle {
+  color: #7b5e47;
+  font-size: 1rem;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.orders-section,
+.new-order-section {
+  margin-bottom: 40px;
+}
+
+.empty-text {
+  text-align: center;
+  color: #998675;
+  font-style: italic;
+  padding: 20px 0;
+}
+
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  padding: 20px;           
+  overflow-y: auto;        
+  max-width: 100%;          
+  margin-left: 20px;       
+}
+
