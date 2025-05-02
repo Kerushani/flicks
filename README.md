@@ -2,7 +2,7 @@
 
 A modern full-stack web platform where users connect to exchange skills — offer what you know and learn what you don't.
 
-**Live Demo**: [https://your-skill-swap-app.vercel.app](https://your-skill-swap-app.vercel.app)
+**Live Demo**: [https://your-skill-swap-app.vercel.app](https://reviews-app123.vercel.app/register)
 
 ---
 
