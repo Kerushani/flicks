@@ -1,6 +1,6 @@
 # Skill Swap Network
 
-A modern full-stack web platform where users connect to exchange skills — offer what you know and learn what you don't.
+A web platform where users connect to exchange skills — offer what you know and learn what you don't.
 
 **Live Demo**: [https://your-skill-swap-app.vercel.app](https://reviews-app123.vercel.app/register)
 
@@ -25,8 +25,4 @@ A modern full-stack web platform where users connect to exchange skills — offe
 - Create, view, and delete posts from a clean dashboard
 - Organized layout for active posts and learning goals
 - Basic authentication and route protection
-
----
-
-> Teach what you know. Learn what you want. – The Skill Swap way.
 
