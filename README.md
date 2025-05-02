@@ -1,4 +1,4 @@
-# 🔄 Skill Swap Network
+# Skill Swap Network
 
 A modern full-stack web platform where users connect to exchange skills — offer what you know and learn what you don't.
 
@@ -6,7 +6,7 @@ A modern full-stack web platform where users connect to exchange skills — offe
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React.js**
@@ -18,9 +18,9 @@ A modern full-stack web platform where users connect to exchange skills — offe
 
 ---
 
-## 🌟 Features
+## Features
 
-- 🧠 Post a skill you’re offering and the skill you want to learn
+- Post a skill you’re offering and the skill you want to learn
 - Browse skill exchange opportunities and connect with others
 - Create, view, and delete posts from a clean dashboard
 - Organized layout for active posts and learning goals
