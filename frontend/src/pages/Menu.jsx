@@ -65,32 +65,7 @@ const Menu = () => {
 
     return(
         <>
-            <div className="menu-container">
-                <h1>Menu Management</h1>
-                <div className="menu-grid">
-                    {sampleMenu.map((item, index) => (
-                        <div
-                            key={index}
-                            className={`menu-item ${selectedItems.includes(item) ? "selected" : ""}`}
-                            onClick={() => toggleItem(item)}
-                        >
-                            {item}
-                        </div>
-                    ))}
-                </div>
-                <form onSubmit={submitOrder} className="order-form">
-                    <input 
-                        type="text"
-                        placeholder="Customer name"
-                        value={customerName}
-                        onChange={(e) => setCustomerName(e.target.value)}
-                        required
-                    />
-                    <button type="submit">
-                        Confirm Order ({selectedItems.length}) item{selectedItems.length !== 1 ? "s" : ""}
-                    </button>
-                </form>
-            </div>
+
         </>
     )
 }

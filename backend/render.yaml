@@ -2,7 +2,7 @@ databases:
   - name: backenddb
     plan: free
     databaseName: backend
-    user: backendß
+    user: backend
 
 services:
   - type: web

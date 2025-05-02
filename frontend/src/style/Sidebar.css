@@ -1,48 +1,50 @@
 .sidebar {
-    width: 220px;
-    height: 100vh;
-    background-color: #3b2f2f; /* deep mocha brown */
-    padding: 2rem 1.5rem;
-    color: #fff3e0; /* creamy white */
-    position: fixed;
-    top: 0;
-    left: 0;
-    font-family: 'Georgia', serif;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .sidebar .logo {
-    font-size: 1.8rem;
-    margin-bottom: 2.5rem;
-    color: #ffcb74; /* warm caramel */
-    font-family: 'Pacifico', cursive; /* Try importing this font if you can */
-    text-align: center;
-  }
-  
-  .sidebar nav {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .sidebar a {
-    text-decoration: none;
-    color: #e0c8b0; /* light coffee cream */
-    font-weight: 500;
-    font-size: 1.1rem;
-    padding: 0.5rem 1rem;
-    border-radius: 12px;
-    transition: all 0.2s ease;
-  }
-  
-  .sidebar a:hover {
-    background-color: #5c4438;
-    color: #fff3e0;
-  }
-  
-  .sidebar a.active {
-    background-color: #ffcb74;
-    color: #3b2f2f;
-    font-weight: bold;
-  }
-  
+  width: 97%;
+  height: 60px;
+  background-color: #1c1c2f; /* dark desaturated purple */
+  padding: 0 2rem;
+  color: #d6ccff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: 0 2px 8px rgba(50, 40, 90, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+}
+
+.sidebar .logo {
+  font-size: 1.5rem;
+  color: #b89cff;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+}
+
+.sidebar nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #dcd2ff;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.sidebar a:hover {
+  background-color: #2a2644;
+  color: #ffffff;
+}
+
+.sidebar a.active {
+  background-color: #7b4bff;
+  color: #ffffff;
+  font-weight: bold;
+}

@@ -1,59 +1,59 @@
 /* Note container styling */
 .note-container {
   font-family: 'Roboto', sans-serif;
-  background-color: #7300ff; 
-  padding: 20px;
-  margin: 20px 0;
-  border: 1px solid #d3b8a3;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(140, 90, 50, 0.1); 
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: #2e2b47; /* Dark purple with a touch of gray */
+  padding: 18px;
+  margin: 18px 0;
+  border: 1px solid #2e2b47;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Darker shadow for depth */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Hover effect for note container */
 .note-container:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(140, 90, 50, 0.2);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
 }
 
 /* Note title styling */
 .note-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #5c3a21; /* Rich coffee brown */
-  margin-bottom: 10px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color:  #b0a0b7; /* Deep purple for the title */
+  margin-bottom: 8px;
 }
 
 /* Note content styling */
 .note-content {
-  font-size: 1rem;
-  color: #4b2e1d; /* Dark roast brown */
-  margin-bottom: 12px;
-  line-height: 1.6;
+  font-size: 1.1rem;
+  color: #c4a5d1; /* Light purple-gray for content */
+  margin-bottom: 10px;
+  line-height: 1.7;
 }
 
 /* Note date styling */
 .note-date {
-  font-size: 0.85rem;
-  color: #8c705f; /* Muted mocha tone */
+  font-size: 0.9rem;
+  color: #b0a0b7; /* Soft muted lavender-gray */
   font-style: italic;
 }
 
 /* Delete button styling */
 .delete-button {
-  background: linear-gradient(135deg, #7b4f35, #a37a60); /* Espresso to caramel gradient */
+  background: linear-gradient(135deg, #1c1a30, #3e3b5b); /* Dark purple to black gradient */
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 12px 18px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: bold;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Delete button hover effect */
 .delete-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(123, 79, 53, 0.3); /* Richer warm hover */
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
 }

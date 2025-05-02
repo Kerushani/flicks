@@ -1,8 +1,8 @@
 /* Global font and background */
 body {
-  font-family: 'Georgia', serif;
-  background-color: #f8f4ec;
-  color: #4b2e1d; /* Coffee brown */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0f0f1a; /* Near-black */
+  color: #d6ccff; /* Soft lavender */
   margin: 0;
   padding: 0;
 }
@@ -16,23 +16,23 @@ body {
 .notes-section h2 {
   font-size: 26px;
   font-weight: 700;
-  color: #5c3a21; /* Rich espresso */
+  color: #a586ff; /* Light purple */
 }
 
 /* Individual note styling */
 .note {
-  background-color: #fff9f3; /* Latte background */
-  border: 1px solid #d7b899; /* Tan border */
+  background-color: #1a1a2e; /* Deep navy-purple */
+  border: 1px solid #3f3c63;
   margin: 16px auto;
   padding: 20px;
   border-radius: 10px;
   max-width: 600px;
-  box-shadow: 0 4px 12px rgba(110, 72, 40, 0.1); /* Soft warm shadow */
+  box-shadow: 0 4px 12px rgba(120, 100, 180, 0.1);
   transition: background-color 0.2s ease;
 }
 
 .note:hover {
-  background-color: #f1e4d6; /* Warm beige on hover */
+  background-color: #2a2644; /* Slightly brighter purple */
 }
 
 /* Title and content within note */
@@ -40,30 +40,31 @@ body {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 6px;
-  color: #6e3b24; /* Cinnamon tone */
+  color: #c7bfff;
 }
 
 .note-content {
   font-size: 15px;
-  color: #4e372c; /* Mocha */
+  color: #b8b0e0;
   line-height: 1.6;
 }
 
 /* Note creation form */
 form {
-  background-color: #fffdf9;
-  padding: 28px;
+  background-color: #1c1c2f;
+  padding: 32px 28px;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(80, 50, 30, 0.08);
+  box-shadow: 0 2px 6px rgba(100, 80, 160, 0.1);
   max-width: 500px;
   margin: 40px auto;
+  box-sizing: border-box;
 }
 
 /* Form header */
 form h2 {
   font-size: 24px;
-  margin-bottom: 20px;
-  color: #5a3825; /* Deep coffee */
+  margin-bottom: 24px;
+  color: #b89cff;
   text-align: center;
 }
 
@@ -71,43 +72,47 @@ form h2 {
 form label {
   font-weight: 500;
   display: block;
-  margin-top: 16px;
   margin-bottom: 6px;
-  color: #4a2f1f; /* Rich roast */
+  margin-top: 20px;
+  color: #d6ccff;
 }
 
 form input,
 form textarea {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #c7a98d; /* Soft caramel border */
+  padding: 12px 14px;
+  border: 1px solid #4a406b;
   border-radius: 6px;
   font-size: 15px;
-  background-color: #fefbf8; 
+  background-color: #2a2644;
+  color: #f5f2ff;
   transition: border-color 0.2s ease;
+  box-sizing: border-box;
+  resize: vertical;
 }
 
 form input:focus,
 form textarea:focus {
-  border-color: #7b4f35; /* Espresso focus */
+  border-color: #a586ff;
   outline: none;
 }
 
 /* Submit button */
 form input[type="submit"] {
-  background-color: #7b4f35; /* Espresso */
+  background-color: #7b4bff;
   color: #ffffff;
-  padding: 12px;
+  padding: 12px 18px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 15px;
-  margin-top: 20px;
+  font-size: 16px;
+  margin-top: 28px;
   transition: background-color 0.2s ease;
+  width: 100%;
 }
 
 form input[type="submit"]:hover {
-  background-color: #5c3a21;
+  background-color: #5930c4;
 }
 
 .home-page {
@@ -124,12 +129,12 @@ form input[type="submit"]:hover {
 
 .cafe-header h1 {
   font-size: 2.5rem;
-  color: #5a3825;
-  font-family: 'Georgia', serif;
+  color: #b89cff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .subtitle {
-  color: #7b5e47;
+  color: #a391c4;
   font-size: 1rem;
   margin-top: 8px;
   font-style: italic;
@@ -142,7 +147,7 @@ form input[type="submit"]:hover {
 
 .empty-text {
   text-align: center;
-  color: #998675;
+  color: #8f88a3;
   font-style: italic;
   padding: 20px 0;
 }
@@ -150,34 +155,34 @@ form input[type="submit"]:hover {
 .main-content {
   flex-grow: 1;
   display: flex;
-  justify-content: center; /* Horizontally centers content */
-  align-items: center;     /* Vertically centers content */
+  justify-content: center;
+  align-items: center;
   padding: 20px;
-  background-color: #f4f4f4;
+  background-color: #0f0f1a;
   overflow-y: auto;
 }
 
 .welcome-container {
   text-align: center;
-  max-width: 800px;         /* Optional: limits the width of the content */
-  margin-top: 50px;         /* Optional: adds some space from the top */
+  max-width: 800px;
+  margin-top: 50px;
 }
 
 .welcome-title {
   font-size: 2.5rem;
-  color: #ffdd57;           /* Bright color to match the cozy café theme */
+  color: #d6ccff;
   margin-bottom: 20px;
 }
 
 .welcome-description {
   font-size: 1.2rem;
-  color: #333;
+  color: #bcb3d6;
   margin-bottom: 30px;
 }
 
 .cta-button {
   text-decoration: none;
-  background-color: #ffdd57;
+  background-color: #7b4bff;
   color: white;
   padding: 12px 24px;
   font-size: 1.1rem;
@@ -186,5 +191,58 @@ form input[type="submit"]:hover {
 }
 
 .cta-button:hover {
-  background-color: #e0c340; /* Darker shade when hovered */
+  background-color: #5930c4;
+}
+
+/* style/Welcome.css */
+.welcome-screen {
+  /* flex-grow: 1; */
+  /* background: linear-gradient(135deg, #121212, #1f1b2e); */
+  color: #e5e5ff;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 40px;
+}
+
+.welcome-card {
+  background-color: rgba(35, 30, 55, 0.95);
+  padding: 50px 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(120, 100, 220, 0.2);
+  animation: fadeInScale 0.6s ease-out;
+  max-width: 640px;
+  width: 100%;
+}
+
+.welcome-card h1 {
+  font-size: 2.6rem;
+  color: #c3aaff;
+  margin-bottom: 20px;
+}
+
+.welcome-subtitle {
+  font-size: 1.25rem;
+  color: #d9cfff;
+  margin-bottom: 16px;
+}
+
+.welcome-tip {
+  font-size: 1rem;
+  color: #a89bc4;
+  opacity: 0.8;
+}
+
+/* Animation */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

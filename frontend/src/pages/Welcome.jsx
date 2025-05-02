@@ -1,11 +1,14 @@
 function Welcome() {
-    return (
-      <div className="welcome-screen">
-        <h1>Welcome to Cozy Café ☕</h1>
-        <p>Select a tab on the left to get started.</p>
+  return (
+    <div className="welcome-screen">
+      <div className="welcome-card">
+        <h1>Skill Swap Network 🌐</h1>
+        <p className="welcome-subtitle">Trade skills. Expand knowledge. Grow together.</p>
       </div>
-    )
-  }
-  
-  export default Welcome
+    </div>
+  );
+}
+
+export default Welcome;
+
   

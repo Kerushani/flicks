@@ -19,14 +19,14 @@ const ActiveOrders = () => {
             setOrders(data)
             console.log(data)
         })
-        .catch((err) => alert("Failed to fetch orders."))
+        .catch((err) => alert("Failed to post."))
     }
 
     const deleteOrder = (id) => {
         api.delete(`/api/notes/delete/${id}`).then((res) => {
-            if (res.status !== 204) alert("Failed to remove order.")
+            if (res.status !== 204) alert("Failed to remove post.")
             getOrders();
-        }).catch((error) => alert("Error deleting order."))
+        }).catch((error) => alert("Error deleting post."))
     };
 
     const createOrder = (e) => {
@@ -35,21 +35,21 @@ const ActiveOrders = () => {
             title: customerName,
             content: orderDetails
         }).then((res) => {
-            if (res.status === 201) alert("Order added to the queue!")
-            else alert("Failed to submit order.")
+            if (res.status === 201) alert("Post created!")
+            else alert("Failed to submit post.")
             getOrders();
-        }).catch((error) => alert("Error submitting order."))
+        }).catch((error) => alert("Error submitting post."))
     }
 
     return (
         <div className="home-page">
             <header className="cafe-header">
-                <h1>☕ Cozy Café Orders</h1>
-                <p className="subtitle">Barista Dashboard – track & manage incoming orders</p>
+                <h1> Skill Swap Network</h1>
+                <p className="subtitle">Skill Swap Network – Build Skills. Build Connections.</p>
             </header>
 
             <section className="orders-section">
-                <h2>📋 Current Orders</h2>
+                <h2>📋 Recent Posts</h2>
                 {orders.length > 0 ? (
                     orders.map((order) => (
                         <Note note={order} onDelete={deleteOrder} key={order.id} />
@@ -60,9 +60,9 @@ const ActiveOrders = () => {
             </section>
 
             <section className="new-order-section">
-                <h2>➕ Add Manual New Order</h2>
+                <h2>➕ Add Post</h2>
                 <form onSubmit={createOrder}>
-                    <label htmlFor="customerName">Customer Name:</label>
+                    <label htmlFor="customerName">Subject</label>
                     <input
                         type="text"
                         id="customerName"
@@ -71,7 +71,7 @@ const ActiveOrders = () => {
                         value={customerName}
                     />
 
-                    <label htmlFor="orderDetails">Order (e.g., Latte w/ almond milk, no foam):</label>
+                    <label htmlFor="orderDetails">Description</label>
                     <textarea
                         id="orderDetails"
                         name="orderDetails"
