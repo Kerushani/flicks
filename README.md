@@ -28,5 +28,5 @@ A modern full-stack web platform where users connect to exchange skills — offe
 
 ---
 
-> “Teach what you know. Learn what you crave.” – The Skill Swap way.
+> “Teach what you know. Learn what you want.” – The Skill Swap way.
 
