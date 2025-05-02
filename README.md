@@ -1,28 +1,32 @@
-# Café Order Management System
+# 🔄 Skill Swap Network
 
-A full-stack web application for managing café orders.
+A modern full-stack web platform where users connect to exchange skills — offer what you know and learn what you don't.
 
-Checkout the website: https://reviews-app123.vercel.app/register
+**Live Demo**: [https://your-skill-swap-app.vercel.app](https://your-skill-swap-app.vercel.app)
+
+---
+
+## 🛠 Tech Stack
 
 ### Frontend
-- React.js with react-router for routing
-- Axios for API communication
-- CSS modules for styling
+- **React.js**
+- **Axios**
 
 ### Backend
-- Django with Django REST Framework
-- PostgreSQL database
+- **Django** + **Django REST Framework**
+- **PostgreSQL**
 
-## Deployment
+---
 
-- Frontend is deployed on Vercel
-- Backend is deployed on Render
+## 🌟 Features
 
-## Features
+- 🧠 Post a skill you’re offering and the skill you want to learn
+- Browse skill exchange opportunities and connect with others
+- Create, view, and delete posts from a clean dashboard
+- Organized layout for active posts and learning goals
+- Basic authentication and route protection
 
-- View current active orders
-- Add manual orders with customer name and custom details
-- Browse and select multiple menu items, assign them to a customer, and confirm
-- Delete orders from the dashboard
-- Navigation between active orders, menu management, and order history
-- Basic authentication and protected routes
+---
+
+> “Teach what you know. Learn what you crave.” – The Skill Swap way.
+
