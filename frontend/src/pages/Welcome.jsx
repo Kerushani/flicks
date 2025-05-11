@@ -2,8 +2,8 @@ function Welcome() {
   return (
     <div className="welcome-screen">
       <div className="welcome-card">
-        <h1>Skill Swap Network 🌐</h1>
-        <p className="welcome-subtitle">Trade skills. Expand knowledge. Grow together.</p>
+        <h1>Flicks 🎬 </h1>
+        <p className="welcome-subtitle">Watch more. Think deeper. Share your take.</p>
       </div>
     </div>
   );

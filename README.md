@@ -1,4 +1,4 @@
-# Skill Swap Network
+# Flicks Network
 
 A web platform where users connect to exchange skills — offer what you know and learn what you don't.
 

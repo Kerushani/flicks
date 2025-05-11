@@ -246,3 +246,14 @@ form input[type="submit"]:hover {
     transform: scale(1);
   }
 }
+
+.welcome-screen{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.welcome-card{
+  text-align: center;
+}

@@ -9,7 +9,7 @@ import Home from "./pages/Home"
 import Welcome from "./pages/Welcome"
 import ActiveOrders from "./pages/ActiveOrders"
 import Menu from "./pages/Menu"
-import OrderHistory from "./pages/OrderHistory"
+import Profile from "./pages/Profile"
 
 function Logout() {
   localStorage.clear()
@@ -25,7 +25,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* PROTECTED ROUTES */}
         <Route
           path="/"
           element={
@@ -37,10 +36,9 @@ function App() {
           <Route index element={<Welcome />} />
           <Route path="active-orders" element={<ActiveOrders />} />
           <Route path="menu" element={<Menu />} />
-          <Route path="order-history" element={<OrderHistory />} />
+          <Route path="order-history" element={<Profile />} />
         </Route>
 
-        {/* PUBLIC ROUTES */}
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
