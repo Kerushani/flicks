@@ -1,6 +1,6 @@
-# Flicks Network
+# Flicks 
 
-A web platform where users connect to exchange skills — offer what you know and learn what you don't.
+A movie reflection and review app where users can explore a daily film pick and share their thoughts. Watch more. Share your take.
 
 **Live Demo**: [https://reviews-app123.vercel.app/register](https://reviews-app123.vercel.app/register)
 
@@ -15,14 +15,4 @@ A web platform where users connect to exchange skills — offer what you know an
 ### Backend
 - **Django** + **Django REST Framework**
 - **PostgreSQL**
-
----
-
-## Features
-
-- Post a skill you’re offering and the skill you want to learn
-- Browse skill exchange opportunities and connect with others
-- Create, view, and delete posts from a clean dashboard
-- Organized layout for active posts and learning goals
-- Basic authentication and route protection
 

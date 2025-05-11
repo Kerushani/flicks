@@ -59,8 +59,8 @@ const ActiveOrders = () => {
     return (
         <div className="home-page">
             <header className="cafe-header">
-                <h1> Flicks Network</h1>
-                <p className="subtitle">Skill Swap Network – Build Skills. Build Connections.</p>
+                <h1> Flicks 🎬</h1>
+                <p className="subtitle">Watch more. Share your take.</p>
             </header>
 
             <section className="orders-section">
