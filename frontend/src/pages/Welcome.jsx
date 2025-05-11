@@ -3,7 +3,7 @@ function Welcome() {
     <div className="welcome-screen">
       <div className="welcome-card">
         <h1>Flicks 🎬 </h1>
-        <p className="welcome-subtitle">Watch more. Think deeper. Share your take.</p>
+        <p className="welcome-subtitle">Watch more. Share your take.</p>
       </div>
     </div>
   );
