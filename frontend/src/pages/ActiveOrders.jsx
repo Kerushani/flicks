@@ -6,10 +6,25 @@ import "../style/Home.css"
 const ActiveOrders = () => {
     const [orders, setOrders] = useState([]);
     const [orderDetails, setOrderDetails] = useState("");
-    const [customerName, setCustomerName] = useState("")
+    const [customerName, setCustomerName] = useState("");
+    const movieTitles = ["Jaws", "Titanic"];
+    const [randomMovie, setRandomMovie] = useState(null);
+     
+    const fetchRandomMovie = async () => {
+        const randomIndex = Math.floor(Math.random()*movieTitles.length);
+        const title = movieTitles[randomIndex];
+        try{
+            const res = await fetch(`https://www.omdbapi.com/?t=${title}&apikey=1e75925c`);
+            const data = await res.json();
+            setRandomMovie(data);
+        } catch (err) {
+            console.error("Failed to fetch random movie")
+        }
+    }
 
     useEffect(() => {
         getOrders();
+        fetchRandomMovie();
     }, [])
 
     const getOrders = () => {
@@ -19,7 +34,7 @@ const ActiveOrders = () => {
             setOrders(data)
             console.log(data)
         })
-        .catch((err) => alert("Failed to post."))
+        .catch((err) => alert("Failed to get post."))
     }
 
     const deleteOrder = (id) => {
@@ -44,18 +59,35 @@ const ActiveOrders = () => {
     return (
         <div className="home-page">
             <header className="cafe-header">
-                <h1> Skill Swap Network</h1>
+                <h1> Flicks Network</h1>
                 <p className="subtitle">Skill Swap Network – Build Skills. Build Connections.</p>
             </header>
 
             <section className="orders-section">
-                <h2>📋 Recent Posts</h2>
+            <h2>📋 Recent Posts</h2>
+
+            {randomMovie ? (
+                <div className="random-movie-card">
+                    <h3>{randomMovie.Title}</h3>
+                    {randomMovie.Poster && (
+                        <img 
+                            src={randomMovie.Poster} 
+                            alt={randomMovie.Title} 
+                            style={{ width: "200px", height: "auto", borderRadius: "8px" }} 
+                        />
+                    )}
+                </div>
+            ) : (
+                <p>Loading movie of the moment...</p>
+            )}
+
+                {randomMovie && randomMovie.Plot && <p>{randomMovie.Plot}</p>}
                 {orders.length > 0 ? (
                     orders.map((order) => (
                         <Note note={order} onDelete={deleteOrder} key={order.id} />
                     ))
                 ) : (
-                    <p className="empty-text">No orders yet. Time for a coffee break!</p>
+                    <p className="empty-text">No posts yet. Be the first!</p>
                 )}
             </section>
 
@@ -80,7 +112,7 @@ const ActiveOrders = () => {
                         onChange={(e) => setOrderDetails(e.target.value)}
                     ></textarea>
 
-                    <input type="submit" value="Add to Queue" />
+                    <input type="submit" value="Add Post" />
                 </form>
             </section>
         </div>

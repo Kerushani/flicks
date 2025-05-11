@@ -7,11 +7,12 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <h2 className="logo">SS 🌍</h2>
+      <h2 className="logo">Flicks 🎬</h2>
       <nav>
         <NavLink to="/" end className={getLinkClass}>Home</NavLink>
-        <NavLink to="/active-orders" className={getLinkClass}>Posts</NavLink>
-        <NavLink to="/menu" className={getLinkClass}>Chat</NavLink>
+        <NavLink to="/active-orders" className={getLinkClass}>Spotlight</NavLink>
+         {/* TO DO: Add chat functionality */}
+        {/* <NavLink to="/menu" className={getLinkClass}>Chat</NavLink> */}
         <NavLink to="/order-history" className={getLinkClass}>Profile</NavLink>
       </nav>
     </div>
