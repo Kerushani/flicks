@@ -6,6 +6,10 @@ A movie reflection and review app where users can explore a daily film pick and 
 
 ---
 
+https://github.com/user-attachments/assets/466cbf3d-f8ec-4b92-b94f-d1a8dacd745f
+
+Note: The backend is hosted on Render’s free tier, which may result in a short delay (a few seconds) when registering a new user due to cold starts after periods of inactivity. I've included a demo video in case the website encounters issues handling requests.
+
 ## Tech Stack
 
 ### Frontend
@@ -15,7 +19,3 @@ A movie reflection and review app where users can explore a daily film pick and 
 ### Backend
 - **Django** + **Django REST Framework**
 - **PostgreSQL**
-
-https://github.com/user-attachments/assets/466cbf3d-f8ec-4b92-b94f-d1a8dacd745f
-
-Note: The backend is hosted on Render’s free tier, which may result in a short delay (a few seconds) when registering a new user due to cold starts after periods of inactivity. I've included a demo video in case the website encounters issues handling requests.
