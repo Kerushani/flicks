@@ -1,6 +1,6 @@
 # Flicks 
 
-A movie reflection and review app where users can explore a daily film pick and share their thoughts.
+A movie reflection and review app.
 
 **Live Demo**: [https://reviews-app123.vercel.app/register](https://reviews-app123.vercel.app/register)
 
