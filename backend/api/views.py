@@ -34,7 +34,6 @@ class NoteDelete(generics.DestroyAPIView):
     def get_queryset(self):
         return Note.objects.filter(author=self.request.user)
 
-# Create your views here.
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -58,7 +57,7 @@ class UserProfileView(APIView):
 class SearchOMDbView(APIView):
     def get(self, request):
         query = request.GET.get('query', '')
-        api_key = '1e75925c'  # Consider moving this to environment variables
+        api_key = '1e75925c'
         
         response = requests.get(f'http://www.omdbapi.com/?t={query}&apikey={api_key}')
         return Response(response.json())
@@ -68,7 +67,6 @@ class SpotifyTokenView(APIView):
 
     def get(self, request):
         try:
-            # Get Spotify credentials from environment variables
             client_id = os.getenv('SPOTIFY_CLIENT_ID')
             client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
 
@@ -127,7 +125,6 @@ class SpotifySearchView(APIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Get Spotify credentials and token
             client_id = os.getenv('SPOTIFY_CLIENT_ID')
             client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
 
@@ -137,7 +134,6 @@ class SpotifySearchView(APIView):
                     status=status.HTTP_503_SERVICE_UNAVAILABLE
                 )
 
-            # Get access token
             auth_response = requests.post(
                 'https://accounts.spotify.com/api/token',
                 data={
@@ -154,7 +150,6 @@ class SpotifySearchView(APIView):
 
             access_token = auth_response.json()['access_token']
 
-            # Search Spotify
             search_response = requests.get(
                 'https://api.spotify.com/v1/search',
                 params={

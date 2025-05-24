@@ -13,7 +13,6 @@ const MovieReviews = () => {
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState(null);
     
-    // Expanded list of curated movies for recommendations
     const movieList = [
         "The Shawshank Redemption", "Pulp Fiction", "The Godfather",
         "Inception", "The Dark Knight", "Fight Club", "Forrest Gump",
@@ -23,29 +22,28 @@ const MovieReviews = () => {
     ];
 
     const getDailyMovie = async () => {
-        // Check if we need to fetch a new movie
-        const lastFetch = localStorage.getItem('lastMovieFetch');
-        const savedMovie = localStorage.getItem('dailyMovie');
-        const now = new Date().getTime();
+        const today = new Date().toISOString().split('T')[0];
+                const savedMovie = localStorage.getItem('dailyMovie');
+        const savedDate = localStorage.getItem('movieDate');
         
-        if (lastFetch && savedMovie && (now - parseInt(lastFetch)) < 24 * 60 * 60 * 1000) {
-            // Use cached movie if it's less than 24 hours old
+        if (savedMovie && savedDate === today) {
             setDailyMovie(JSON.parse(savedMovie));
             setLoading(false);
             return;
         }
 
-        // Get new movie if cache expired or doesn't exist
         try {
-            const randomIndex = Math.floor(Math.random() * movieList.length);
-            const title = movieList[randomIndex];
+            const dateNum = parseInt(today.replace(/-/g, ''));
+            const movieIndex = dateNum % movieList.length;
+            
+            const title = movieList[movieIndex];
             const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=1e75925c`);
             const data = await res.json();
             
             if (data.Response === "True") {
                 setDailyMovie(data);
                 localStorage.setItem('dailyMovie', JSON.stringify(data));
-                localStorage.setItem('lastMovieFetch', now.toString());
+                localStorage.setItem('movieDate', today);
             }
         } catch (err) {
             console.error("Failed to fetch daily movie", err);
