@@ -40,8 +40,8 @@
   padding: 25px;
   position: sticky;
   top: 2rem;
-  height: calc(100vh - 4rem);
-  overflow-y: auto;
+  max-height: fit-content;
+  overflow-y: visible;
 }
 
 .daily-recommendation h2 {
@@ -125,7 +125,7 @@
   border: 1px solid #2a2a2a;
   border-radius: 16px;
   padding: 30px;
-  height: calc(100vh - 4rem);
+  max-height: fit-content;
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -202,7 +202,7 @@
 
 .reviews-list {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: visible;
   margin: 0 -0.5rem;
   padding: 0 0.5rem;
 }
