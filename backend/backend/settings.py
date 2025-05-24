@@ -97,17 +97,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv("DB_NAME"),
-#         "USER": os.getenv("DB_USER"),
-#         "PASSWORD": os.getenv("DB_PWD"),
-#         "HOST": os.getenv("DB_HOST"),
-#         "PORT": os.getenv("DB_PORT")
-#     }
-# }
-
 # local db - uncomment when running locally
 # DATABASES = {
 #     "default": {
@@ -119,10 +108,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # prod - db -- uncomment when pushing code
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get("DB_URL"), 
+        default=os.environ.get("DB_URL"),
         conn_max_age=600
     )
 }
+
+# The GitHub Actions workflow will use the same DB_URL environment variable
+# which will be set to: postgres://postgres:postgres@localhost:5432/github_actions
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
