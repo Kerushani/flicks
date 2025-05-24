@@ -128,7 +128,17 @@ function Note({ note, onDelete, onEdit, onReply, currentUser }) {
                                     />
                                     <span className="reply-author">{reply.author_username}</span>
                                 </div>
-                                <span className="reply-time">{reply.time_ago}</span>
+                                <div className="reply-actions">
+                                    {currentUser && currentUser.username === reply.author_username && (
+                                        <button 
+                                            className="action-button delete-button small"
+                                            onClick={() => onDelete(reply.id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    )}
+                                    <span className="reply-time">{reply.time_ago}</span>
+                                </div>
                             </div>
                             <p className="reply-content">{reply.content}</p>
                             {reply.edited && <span className="edited-tag small">(edited)</span>}

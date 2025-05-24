@@ -50,7 +50,7 @@ class NoteSerializer(serializers.ModelSerializer):
         try:
             return obj.author.profile.avatar
         except UserProfile.DoesNotExist:
-            return 'https://api.dicebear.com/7.x/avataaars/svg'
+            return f'https://api.dicebear.com/7.x/bottts/svg?seed={obj.author.username}'
 
 class NoteReplySerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(source='author.username', read_only=True)
@@ -66,4 +66,4 @@ class NoteReplySerializer(serializers.ModelSerializer):
         try:
             return obj.author.profile.avatar
         except UserProfile.DoesNotExist:
-            return 'https://api.dicebear.com/7.x/avataaars/svg'
+            return f'https://api.dicebear.com/7.x/bottts/svg?seed={obj.author.username}'

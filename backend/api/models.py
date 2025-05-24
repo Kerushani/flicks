@@ -5,7 +5,7 @@ from django.utils import timezone
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    avatar = models.URLField(default='https://api.dicebear.com/7.x/avataaars/svg')  # Default avatar URL
+    avatar = models.URLField(default='https://api.dicebear.com/7.x/bottts/svg')  # Default avatar URL
     bio = models.TextField(max_length=500, blank=True)
 
     def __str__(self):
@@ -14,7 +14,7 @@ class UserProfile(models.Model):
     def save(self, *args, **kwargs):
         if not self.avatar:
             # Generate unique avatar URL using username
-            self.avatar = f'https://api.dicebear.com/7.x/avataaars/svg?seed={self.user.username}'
+            self.avatar = f'https://api.dicebear.com/7.x/bottts/svg?seed={self.user.username}'
         super().save(*args, **kwargs)
 
 class Note(models.Model):

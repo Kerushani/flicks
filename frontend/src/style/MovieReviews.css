@@ -1,8 +1,11 @@
 .movie-review-page {
+  height: 80vh;
   max-width: 1400px;
-  margin: 0 auto;
-  padding: 40px 20px;
+  margin: 2rem auto;
+  padding: 20px;
   font-family: 'Open Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 .page-header {
@@ -28,6 +31,8 @@
   display: grid;
   grid-template-columns: minmax(300px, 2fr) 3fr;
   gap: 40px;
+  flex: 1;
+  min-height: 0;
   align-items: start;
 }
 
@@ -36,35 +41,42 @@
   background: #141414;
   border: 1px solid #2a2a2a;
   border-radius: 16px;
-  padding: 30px;
+  padding: 25px;
+  height: fit-content;
   position: sticky;
-  top: 20px;
+  top: 0;
 }
 
 .daily-recommendation h2 {
   color: #ffffff;
-  font-size: 1.8rem;
-  margin-bottom: 30px;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
   font-weight: 600;
 }
 
 .featured-movie {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) 1fr;
+  gap: 25px;
+  align-items: start;
+}
+
+.movie-poster {
+  width: 100%;
 }
 
 .movie-poster img {
   width: 100%;
-  height: auto;
+  aspect-ratio: 2/3;
+  object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .movie-details h3 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: #ffffff;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .year {
@@ -74,24 +86,27 @@
 
 .movie-meta {
   color: #888888;
-  margin-bottom: 20px;
-  font-size: 1rem;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .movie-meta span {
-  margin: 0 10px;
+  margin: 0;
 }
 
 .movie-plot {
   color: #e0e0e0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.6;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .movie-credits {
   color: #888888;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .movie-credits p {
@@ -108,76 +123,68 @@
   border: 1px solid #2a2a2a;
   border-radius: 16px;
   padding: 30px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .community-section h2 {
   color: #ffffff;
-  font-size: 1.8rem;
-  margin-bottom: 30px;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
   font-weight: 600;
 }
 
 /* Reviews List */
 .reviews-list {
-  margin-bottom: 40px;
-  max-height: 600px;
+  flex: 1;
   overflow-y: auto;
   padding-right: 15px;
-}
-
-.reviews-list::-webkit-scrollbar {
-  width: 8px;
-}
-
-.reviews-list::-webkit-scrollbar-track {
-  background: #1a1a1a;
-  border-radius: 4px;
-}
-
-.reviews-list::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
-  border-radius: 4px;
-}
-
-.reviews-list::-webkit-scrollbar-thumb:hover {
-  background: #3a3a3a;
+  margin-bottom: 10px;
+  min-height: 100px;
+  resize: vertical;
 }
 
 /* Create Review Section */
 .create-review {
   border-top: 1px solid #2a2a2a;
-  padding-top: 30px;
+  padding-top: 15px;
+  min-height: 150px;
+  max-height: 40%;
+  overflow-y: auto;
+  resize: vertical;
 }
 
 .create-review h3 {
   color: #ffffff;
-  font-size: 1.4rem;
-  margin-bottom: 20px;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
   font-weight: 600;
 }
 
 .review-title-input {
   width: 100%;
-  padding: 15px;
+  padding: 10px;
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
-  border-radius: 8px;
+  border-radius: 6px;
   color: #ffffff;
-  font-size: 1.1rem;
-  margin-bottom: 20px;
+  font-size: 1rem;
+  margin-bottom: 10px;
   font-family: 'Open Sans', sans-serif;
 }
 
 .review-content-input {
   width: 100%;
-  min-height: 120px;
-  padding: 15px;
+  min-height: 60px;
+  padding: 10px;
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
-  border-radius: 8px;
+  border-radius: 6px;
   color: #ffffff;
-  font-size: 1.1rem;
-  margin-bottom: 20px;
+  font-size: 1rem;
+  margin-bottom: 10px;
   font-family: 'Open Sans', sans-serif;
   resize: vertical;
 }
@@ -186,9 +193,9 @@
   background: #1a1a1a;
   color: #ffffff;
   border: 1px solid #2a2a2a;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 1.1rem;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: 'Open Sans', sans-serif;
@@ -198,6 +205,37 @@
   background: #9370DB;
   border-color: #9370DB;
   transform: translateY(-1px);
+}
+
+/* Resize handle styling */
+.reviews-list::-webkit-resizer,
+.create-review::-webkit-resizer {
+  background-color: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 2px;
+}
+
+/* Scrollbar styling */
+.reviews-list::-webkit-scrollbar,
+.create-review::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reviews-list::-webkit-scrollbar-track,
+.create-review::-webkit-scrollbar-track {
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.reviews-list::-webkit-scrollbar-thumb,
+.create-review::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 4px;
+}
+
+.reviews-list::-webkit-scrollbar-thumb:hover,
+.create-review::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
 }
 
 .empty-state {
@@ -215,7 +253,7 @@
   }
 
   .daily-recommendation {
-    position: static;
+    max-height: 50vh;
   }
 
   .featured-movie {
@@ -236,9 +274,5 @@
   .movie-poster {
     max-width: 300px;
     margin: 0 auto;
-  }
-
-  .reviews-list {
-    max-height: 500px;
   }
 } 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import api from "../api"
 import Note from "../components/Note"
+import SoundtrackWidget from "../components/SoundtrackWidget"
 import "../style/Home.css"
 import "../style/MovieReviews.css"
 
@@ -75,7 +76,7 @@ const MovieReviews = () => {
     };
 
     const deletePost = (id) => {
-        api.delete(`/api/notes/delete/${id}`)
+        api.delete(`/api/notes/delete/${id}/`)
             .then((res) => {
                 if (res.status === 204) getPosts();
             })
@@ -98,6 +99,7 @@ const MovieReviews = () => {
     const replyToPost = async (parentId, content) => {
         try {
             const response = await api.post("/api/notes/", {
+                title: "Reply",
                 content: content,
                 parent: parentId
             });
@@ -127,11 +129,6 @@ const MovieReviews = () => {
 
     return (
         <div className="movie-review-page">
-            <header className="page-header">
-                <h1>Flicks</h1>
-                <p className="tagline">Discover. Review. Share.</p>
-            </header>
-
             <div className="main-content-grid">
                 {/* Left Column - Featured Film */}
                 <section className="daily-recommendation">
@@ -160,12 +157,44 @@ const MovieReviews = () => {
                             </div>
                         </div>
                     )}
+                    
+                    {/* Soundtrack Widget */}
+                    {dailyMovie && (
+                        <SoundtrackWidget movieTitle={dailyMovie.Title} />
+                    )}
                 </section>
 
                 {/* Right Column - Community Section */}
                 <section className="community-section">
                     <h2>Community Reviews</h2>
-                    
+
+                    {/* Add Review Form */}
+                    <div className="create-review">
+                        <h3>Share Your Thoughts</h3>
+                        <form onSubmit={createPost}>
+                            <input
+                                type="text"
+                                placeholder="Main highlight..."
+                                required
+                                value={postTitle}
+                                onChange={(e) => setPostTitle(e.target.value)}
+                                className="review-title-input"
+                            />
+
+                            <textarea
+                                placeholder="Let's hear it..."
+                                required
+                                value={postContent}
+                                onChange={(e) => setPostContent(e.target.value)}
+                                className="review-content-input"
+                            ></textarea>
+
+                            <button type="submit" className="submit-review">
+                                Post Review
+                            </button>
+                        </form>
+                    </div>
+
                     {/* Reviews List */}
                     <div className="reviews-list">
                         {posts.length > 0 ? (
@@ -182,33 +211,6 @@ const MovieReviews = () => {
                         ) : (
                             <p className="empty-state">No reviews yet. Be the first to share your thoughts!</p>
                         )}
-                    </div>
-
-                    {/* Add Review Form */}
-                    <div className="create-review">
-                        <h3>Share Your Thoughts</h3>
-                        <form onSubmit={createPost}>
-                            <input
-                                type="text"
-                                placeholder="What movie are you reviewing?"
-                                required
-                                value={postTitle}
-                                onChange={(e) => setPostTitle(e.target.value)}
-                                className="review-title-input"
-                            />
-
-                            <textarea
-                                placeholder="Write your review..."
-                                required
-                                value={postContent}
-                                onChange={(e) => setPostContent(e.target.value)}
-                                className="review-content-input"
-                            ></textarea>
-
-                            <button type="submit" className="submit-review">
-                                Post Review
-                            </button>
-                        </form>
                     </div>
                 </section>
             </div>

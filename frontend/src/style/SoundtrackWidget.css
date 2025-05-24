@@ -1,0 +1,24 @@
+.spotify-player {
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.loading-details {
+    color: #888888;
+    text-align: center;
+    font-size: 0.9rem;
+    margin: 20px 0;
+}
+
+.error-message {
+    color: #ff6b6b;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .spotify-player {
+        height: 300px;
+    }
+} 
