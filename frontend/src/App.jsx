@@ -7,7 +7,7 @@ import NotFound from "./pages/NotFound"
 import ProtectedRoute from "./components/ProtectedRoute"
 import Home from "./pages/Home"
 import Welcome from "./pages/Welcome"
-import ActiveOrders from "./pages/ActiveOrders"
+import Spotlight from "./pages/Spotlight"
 import Menu from "./pages/Menu"
 import Profile from "./pages/Profile"
 
@@ -34,9 +34,9 @@ function App() {
           }
         >
           <Route index element={<Welcome />} />
-          <Route path="active-orders" element={<ActiveOrders />} />
+          <Route path="spotlight" element={<Spotlight />} />
           <Route path="menu" element={<Menu />} />
-          <Route path="order-history" element={<Profile />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
 
         <Route path="/login" element={<Login />} />

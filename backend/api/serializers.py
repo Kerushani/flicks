@@ -32,7 +32,7 @@ class NoteSerializer(serializers.ModelSerializer):
         model = Note
         fields = ["id", "title", "content", "created_at", "updated_at", "author",
                  "author_username", "author_id", "author_avatar", "time_ago",
-                 "edited", "replies", "reply_count", "parent"]
+                 "edited", "replies", "reply_count", "parent", "movie_imdb_id", "movie_title"]
         extra_kwargs = {"author": {"read_only": True}}
 
     def get_replies(self, obj):

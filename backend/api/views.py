@@ -13,10 +13,22 @@ class NoteListCreate(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        movie_imdb_id = self.request.query_params.get('movie_imdb_id', None)
+        if movie_imdb_id:
+            return Note.objects.filter(
+                parent=None,
+                movie_imdb_id=movie_imdb_id
+            ).order_by('-created_at')
         return Note.objects.filter(parent=None).order_by('-created_at')
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        movie_imdb_id = self.request.data.get('movie_imdb_id')
+        movie_title = self.request.data.get('movie_title')
+        serializer.save(
+            author=self.request.user,
+            movie_imdb_id=movie_imdb_id,
+            movie_title=movie_title
+        )
 
 class NoteDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Note.objects.all()

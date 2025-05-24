@@ -44,6 +44,8 @@ class Note(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notes")
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
     edited = models.BooleanField(default=False)
+    movie_imdb_id = models.CharField(max_length=20, null=True, blank=True)  # Store IMDb ID of the movie
+    movie_title = models.CharField(max_length=200, null=True, blank=True)    # Store movie title for easier querying
 
     class Meta:
         ordering = ['-created_at']

@@ -39,7 +39,7 @@ const Sidebar = () => {
       <h2 className="logo">Flicks</h2>
       <nav>
         <NavLink to="/" end className={getLinkClass}>Home</NavLink>
-        <NavLink to="/active-orders" className={getLinkClass}>Spotlight</NavLink>
+        <NavLink to="/spotlight" className={getLinkClass}>Spotlight</NavLink>
          {/* TO DO: Add chat functionality */}
         {/* <NavLink to="/menu" className={getLinkClass}>Chat</NavLink> */}
         <div className="profile-menu" ref={dropdownRef}>
@@ -55,8 +55,8 @@ const Sidebar = () => {
           </button>
           {showDropdown && (
             <div className="dropdown-menu">
-              <NavLink to="/order-history" className="dropdown-item">
-                Dashboard
+              <NavLink to="/profile" className="dropdown-item">
+                Profile
               </NavLink>
               <NavLink to="/logout" className="dropdown-item">
                 Logout

@@ -5,7 +5,7 @@ import SoundtrackWidget from "../components/SoundtrackWidget"
 import "../style/Home.css"
 import "../style/MovieReviews.css"
 
-const MovieReviews = () => {
+const Spotlight = () => {
     const [posts, setPosts] = useState([]);
     const [postContent, setPostContent] = useState("");
     const [postTitle, setPostTitle] = useState("");
@@ -27,7 +27,9 @@ const MovieReviews = () => {
         const savedDate = localStorage.getItem('movieDate');
         
         if (savedMovie && savedDate === today) {
-            setDailyMovie(JSON.parse(savedMovie));
+            const movie = JSON.parse(savedMovie);
+            setDailyMovie(movie);
+            getMovieReviews(movie.imdbID);
             setLoading(false);
             return;
         }
@@ -42,6 +44,7 @@ const MovieReviews = () => {
             
             if (data.Response === "True") {
                 setDailyMovie(data);
+                getMovieReviews(data.imdbID);
                 localStorage.setItem('dailyMovie', JSON.stringify(data));
                 localStorage.setItem('movieDate', today);
             }
@@ -52,7 +55,6 @@ const MovieReviews = () => {
     };
 
     useEffect(() => {
-        getPosts();
         getDailyMovie();
         getCurrentUser();
     }, []);
@@ -66,28 +68,37 @@ const MovieReviews = () => {
         }
     };
 
-    const getPosts = () => {
-        api.get("/api/notes/")
-            .then((res) => res.data)
-            .then((data) => setPosts(data))
-            .catch((err) => console.error("Failed to fetch posts:", err));
+    const getMovieReviews = async (imdbId) => {
+        try {
+            const response = await api.get("/api/notes/", {
+                params: { movie_imdb_id: imdbId }
+            });
+            setPosts(response.data);
+        } catch (err) {
+            console.error("Failed to fetch movie reviews:", err);
+        }
     };
 
-    const deletePost = (id) => {
-        api.delete(`/api/notes/delete/${id}/`)
-            .then((res) => {
-                if (res.status === 204) getPosts();
-            })
-            .catch((error) => console.error("Error deleting post:", error));
+    const deletePost = async (id) => {
+        try {
+            const response = await api.delete(`/api/notes/delete/${id}/`);
+            if (response.status === 204) {
+                getMovieReviews(dailyMovie.imdbID);
+            }
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
     };
 
     const editPost = async (id, newContent) => {
         try {
             const response = await api.put(`/api/notes/${id}/`, {
-                content: newContent
+                content: newContent,
+                movie_imdb_id: dailyMovie.imdbID,
+                movie_title: dailyMovie.Title
             });
             if (response.status === 200) {
-                getPosts();
+                getMovieReviews(dailyMovie.imdbID);
             }
         } catch (error) {
             console.error("Error editing post:", error);
@@ -99,33 +110,38 @@ const MovieReviews = () => {
             const response = await api.post("/api/notes/", {
                 title: "Reply",
                 content: content,
-                parent: parentId
+                parent: parentId,
+                movie_imdb_id: dailyMovie.imdbID,
+                movie_title: dailyMovie.Title
             });
             if (response.status === 201) {
-                getPosts();
+                getMovieReviews(dailyMovie.imdbID);
             }
         } catch (error) {
             console.error("Error replying to post:", error);
         }
     };
 
-    const createPost = (e) => {
+    const createPost = async (e) => {
         e.preventDefault();
         if (!postTitle.trim() || !postContent.trim()) {
             return;
         }
-        api.post("/api/notes/", {
-            title: postTitle,
-            content: postContent
-        })
-        .then((res) => {
-            if (res.status === 201) {
-                getPosts();
+        try {
+            const response = await api.post("/api/notes/", {
+                title: postTitle,
+                content: postContent,
+                movie_imdb_id: dailyMovie.imdbID,
+                movie_title: dailyMovie.Title
+            });
+            if (response.status === 201) {
+                getMovieReviews(dailyMovie.imdbID);
                 setPostTitle("");
                 setPostContent("");
             }
-        })
-        .catch((error) => console.error("Error creating post:", error));
+        } catch (error) {
+            console.error("Error creating post:", error);
+        }
     };
 
     return (
@@ -220,4 +236,4 @@ const MovieReviews = () => {
     );
 };
 
-export default MovieReviews;
+export default Spotlight;
