@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../style/Note.css"
 
 function Note({ note, onDelete, onEdit, onReply, currentUser }) {
@@ -7,12 +7,19 @@ function Note({ note, onDelete, onEdit, onReply, currentUser }) {
     const [isReplying, setIsReplying] = useState(false);
     const [replyContent, setReplyContent] = useState("");
     const [showReplies, setShowReplies] = useState(false);
+    const [localContent, setLocalContent] = useState(note.content);
+
+    useEffect(() => {
+        setLocalContent(note.content);
+        setEditedContent(note.content);
+    }, [note.content]);
 
     const isAuthor = currentUser && currentUser.id === note.author_id;
 
-    const handleEdit = () => {
-        onEdit(note.id, editedContent);
+    const handleEdit = async () => {
+        await onEdit(note.id, editedContent);
         setIsEditing(false);
+        setLocalContent(editedContent);
     };
 
     const handleReply = () => {
@@ -47,7 +54,7 @@ function Note({ note, onDelete, onEdit, onReply, currentUser }) {
                         className="edit-textarea"
                     />
                 ) : (
-                    <p>{note.content}</p>
+                    <p>{localContent}</p>
                 )}
             </div>
 

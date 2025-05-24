@@ -1,11 +1,9 @@
 .movie-review-page {
-  height: 80vh;
+  min-height: 100vh;
   max-width: 1400px;
   margin: 2rem auto;
   padding: 20px;
   font-family: 'Open Sans', sans-serif;
-  display: flex;
-  flex-direction: column;
 }
 
 .page-header {
@@ -31,8 +29,6 @@
   display: grid;
   grid-template-columns: minmax(300px, 2fr) 3fr;
   gap: 40px;
-  flex: 1;
-  min-height: 0;
   align-items: start;
 }
 
@@ -42,9 +38,10 @@
   border: 1px solid #2a2a2a;
   border-radius: 16px;
   padding: 25px;
-  height: fit-content;
   position: sticky;
-  top: 0;
+  top: 2rem;
+  height: calc(100vh - 4rem);
+  overflow-y: auto;
 }
 
 .daily-recommendation h2 {
@@ -52,6 +49,11 @@
   font-size: 1.6rem;
   margin-bottom: 20px;
   font-weight: 600;
+  position: sticky;
+  top: 0;
+  background: #141414;
+  padding-bottom: 1rem;
+  z-index: 1;
 }
 
 .featured-movie {
@@ -123,10 +125,11 @@
   border: 1px solid #2a2a2a;
   border-radius: 16px;
   padding: 30px;
-  height: 100%;
+  height: calc(100vh - 4rem);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  position: sticky;
+  top: 2rem;
 }
 
 .community-section h2 {
@@ -136,24 +139,16 @@
   font-weight: 600;
 }
 
-.reviews-list {
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 15px;
-  margin-bottom: 10px;
-  min-height: 100px;
-}
-
 .create-review {
   border-top: 1px solid #2a2a2a;
-  padding-top: 15px;
-  min-height: 150px;
+  padding-top: 12px;
+  min-height: 120px;
 }
 
 .create-review h3 {
   color: #ffffff;
   font-size: 1.2rem;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   font-weight: 600;
 }
 
@@ -161,28 +156,15 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.review-title-input,
-.review-content-input {
-  width: 100%;
-  padding: 12px;
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
-  color: #ffffff;
-  font-size: 1rem;
-  font-family: 'Open Sans', sans-serif;
-  transition: all 0.2s ease;
+  gap: 0.75rem;
 }
 
 .review-title-input {
-  height: 45px;
+  height: 40px;
 }
 
 .review-content-input {
-  min-height: 120px;
+  min-height: 80px;
   resize: vertical;
   line-height: 1.5;
 }
@@ -218,21 +200,34 @@
   opacity: 0.7;
 }
 
-.reviews-list::-webkit-scrollbar,
-.create-review::-webkit-scrollbar {
+.reviews-list {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0 -0.5rem;
+  padding: 0 0.5rem;
+}
+
+/* Custom scrollbar for both sections */
+.daily-recommendation::-webkit-scrollbar,
+.reviews-list::-webkit-scrollbar {
   width: 8px;
 }
 
-.reviews-list::-webkit-scrollbar-track,
-.create-review::-webkit-scrollbar-track {
+.daily-recommendation::-webkit-scrollbar-track,
+.reviews-list::-webkit-scrollbar-track {
   background: #1a1a1a;
   border-radius: 4px;
 }
 
-.reviews-list::-webkit-scrollbar-thumb,
-.create-review::-webkit-scrollbar-thumb {
+.daily-recommendation::-webkit-scrollbar-thumb,
+.reviews-list::-webkit-scrollbar-thumb {
   background: #2a2a2a;
   border-radius: 4px;
+}
+
+.daily-recommendation::-webkit-scrollbar-thumb:hover,
+.reviews-list::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
 }
 
 .empty-state {
@@ -246,11 +241,18 @@
 @media (max-width: 1024px) {
   .main-content-grid {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 2rem;
   }
 
-  .daily-recommendation {
-    max-height: 50vh;
+  .daily-recommendation,
+  .community-section {
+    position: static;
+    height: auto;
+    max-height: none;
+  }
+
+  .reviews-list {
+    max-height: 600px;
   }
 
   .featured-movie {
