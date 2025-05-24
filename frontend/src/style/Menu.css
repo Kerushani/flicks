@@ -1,24 +1,26 @@
 .menu-item {
-    padding: 10px 15px;
+    padding: 12px 16px;
     margin: 5px;
-    border: 2px solid #ccc;
+    border: 1px solid #2a2a2a;
     border-radius: 8px;
     cursor: pointer;
-    transition: 0.2s ease;
-    background-color: #f9f3e9;
+    transition: all 0.2s ease;
+    background-color: #141414;
+    color: #ffffff;
+    font-family: 'Open Sans', sans-serif;
   }
   
   .menu-item.selected {
-    border-color: #a8713a;
-    background-color: #ffe0b2;
-    font-weight: bold;
+    border-color: #9370DB;
+    background-color: #1a1a1a;
+    font-weight: 600;
   }
   
   .menu-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-bottom: 24px;
   }
   
   .order-form {
@@ -27,39 +29,46 @@
     gap: 1rem;
     max-width: 400px;
     margin-top: 2rem;
+    font-family: 'Open Sans', sans-serif;
   }
   
   .order-form label {
-    font-weight: bold;
-    margin-bottom: 0.3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
   }
   
   .order-form input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 12px;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
     font-size: 1rem;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-family: 'Open Sans', sans-serif;
   }
   
   .order-form button {
     align-self: flex-start;
-    padding: 10px 20px;
-    background-color: #a8713a;
+    padding: 12px 24px;
+    background-color: #1a1a1a;
     color: white;
-    border: none;
-    border-radius: 6px;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    font-family: 'Open Sans', sans-serif;
   }
   
   .order-form button:hover {
-    background-color: #905f2e;
+    background-color: #9370DB;
+    border-color: #9370DB;
   }  
 
   .menu-container {
     padding: 2rem;
-    font-family: sans-serif;
+    font-family: 'Open Sans', sans-serif;
   }
   
   .menu-grid {
@@ -69,18 +78,21 @@
   }
   
   .menu-item {
-    background-color: #f5f5f5;
+    background-color: #141414;
     padding: 1rem;
     border-radius: 8px;
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    color: #ffffff;
   }
   
   .menu-item:hover {
-    background-color: #e0e0e0;
+    background-color: #1a1a1a;
+    border-color: #9370DB;
   }
 
   

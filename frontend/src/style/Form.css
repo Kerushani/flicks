@@ -1,41 +1,42 @@
 /* Form container style */
 .form-container {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin: 50px auto;
   padding: 30px;
-  border-radius: 16px;
-  /* box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);  */
+  border-radius: 12px;
   max-width: 420px;
-  background: #ffffff;  
+  background: #141414;
+  border: 1px solid #2a2a2a;
   transition: transform 0.3s ease;
 }
 
 .form-container:hover {
-  transform: scale(1.02); 
+  transform: scale(1.01);
 }
 
 .form-input {
   width: 100%;
   padding: 12px 15px;
   margin: 12px 0;
-  border: 1px solid #c1cbe3; 
+  border: 1px solid #2a2a2a;
   border-radius: 8px;
   box-sizing: border-box;
   font-size: 16px;
-  background-color: #f7f9fc;  
-  color: #1d3c55;  
-  transition: border 0.2s ease;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: 'Open Sans', sans-serif;
+  transition: all 0.2s ease;
 }
 
 /* Input focus state */
 .form-input:focus {
-  border-color: #1d3c55; /* Dark blue border on focus */
+  border-color: #9370DB;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(29, 60, 85, 0.2); /* Light dark blue glow */
+  box-shadow: 0 0 0 1px rgba(147, 112, 219, 0.1);
 }
 
 /* Submit button styling */
@@ -43,18 +44,20 @@
   width: 100%;
   padding: 12px;
   margin-top: 20px;
-  background: #1d3c55; /* Dark blue background */
+  background: #1a1a1a;
   color: white;
-  border: none;
+  border: 1px solid #2a2a2a;
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: bold;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 600;
+  font-family: 'Open Sans', sans-serif;
+  transition: all 0.2s ease;
 }
 
 /* Button hover effect */
 .form-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(29, 60, 85, 0.2);  /* Dark blue shadow on hover */
+  background: #9370DB;
+  border-color: #9370DB;
+  transform: translateY(-1px);
 }

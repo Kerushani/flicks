@@ -2,121 +2,218 @@ import { useState, useEffect } from "react"
 import api from "../api"
 import Note from "../components/Note"
 import "../style/Home.css"
+import "../style/MovieReviews.css"
 
-const ActiveOrders = () => {
-    const [orders, setOrders] = useState([]);
-    const [orderDetails, setOrderDetails] = useState("");
-    const [customerName, setCustomerName] = useState("");
-    const movieTitles = ["Jaws", "Titanic"];
-    const [randomMovie, setRandomMovie] = useState(null);
-     
-    const fetchRandomMovie = async () => {
-        const randomIndex = Math.floor(Math.random()*movieTitles.length);
-        const title = movieTitles[randomIndex];
-        try{
-            const res = await fetch(`https://www.omdbapi.com/?t=${title}&apikey=1e75925c`);
-            const data = await res.json();
-            setRandomMovie(data);
-        } catch (err) {
-            console.error("Failed to fetch random movie")
+const MovieReviews = () => {
+    const [posts, setPosts] = useState([]);
+    const [postContent, setPostContent] = useState("");
+    const [postTitle, setPostTitle] = useState("");
+    const [dailyMovie, setDailyMovie] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [currentUser, setCurrentUser] = useState(null);
+    
+    // Expanded list of curated movies for recommendations
+    const movieList = [
+        "The Shawshank Redemption", "Pulp Fiction", "The Godfather",
+        "Inception", "The Dark Knight", "Fight Club", "Forrest Gump",
+        "The Matrix", "Goodfellas", "The Silence of the Lambs",
+        "Se7en", "The Departed", "Gladiator", "The Prestige",
+        "Memento", "The Green Mile", "Saving Private Ryan"
+    ];
+
+    const getDailyMovie = async () => {
+        // Check if we need to fetch a new movie
+        const lastFetch = localStorage.getItem('lastMovieFetch');
+        const savedMovie = localStorage.getItem('dailyMovie');
+        const now = new Date().getTime();
+        
+        if (lastFetch && savedMovie && (now - parseInt(lastFetch)) < 24 * 60 * 60 * 1000) {
+            // Use cached movie if it's less than 24 hours old
+            setDailyMovie(JSON.parse(savedMovie));
+            setLoading(false);
+            return;
         }
-    }
 
-    useEffect(() => {
-        getOrders();
-        fetchRandomMovie();
-    }, [])
-
-    const getOrders = () => {
-        api.get("/api/notes/")
-        .then((res) => res.data)
-        .then((data) => {
-            setOrders(data)
-            console.log(data)
-        })
-        .catch((err) => alert("Failed to get post."))
-    }
-
-    const deleteOrder = (id) => {
-        api.delete(`/api/notes/delete/${id}`).then((res) => {
-            if (res.status !== 204) alert("Failed to remove post.")
-            getOrders();
-        }).catch((error) => alert("Error deleting post."))
+        // Get new movie if cache expired or doesn't exist
+        try {
+            const randomIndex = Math.floor(Math.random() * movieList.length);
+            const title = movieList[randomIndex];
+            const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=1e75925c`);
+            const data = await res.json();
+            
+            if (data.Response === "True") {
+                setDailyMovie(data);
+                localStorage.setItem('dailyMovie', JSON.stringify(data));
+                localStorage.setItem('lastMovieFetch', now.toString());
+            }
+        } catch (err) {
+            console.error("Failed to fetch daily movie", err);
+        }
+        setLoading(false);
     };
 
-    const createOrder = (e) => {
-        e.preventDefault()
+    useEffect(() => {
+        getPosts();
+        getDailyMovie();
+        getCurrentUser();
+    }, []);
+
+    const getCurrentUser = async () => {
+        try {
+            const response = await api.get("/api/profile/");
+            setCurrentUser(response.data);
+        } catch (err) {
+            console.error("Failed to fetch current user:", err);
+        }
+    };
+
+    const getPosts = () => {
+        api.get("/api/notes/")
+            .then((res) => res.data)
+            .then((data) => setPosts(data))
+            .catch((err) => console.error("Failed to fetch posts:", err));
+    };
+
+    const deletePost = (id) => {
+        api.delete(`/api/notes/delete/${id}`)
+            .then((res) => {
+                if (res.status === 204) getPosts();
+            })
+            .catch((error) => console.error("Error deleting post:", error));
+    };
+
+    const editPost = async (id, newContent) => {
+        try {
+            const response = await api.put(`/api/notes/${id}/`, {
+                content: newContent
+            });
+            if (response.status === 200) {
+                getPosts();
+            }
+        } catch (error) {
+            console.error("Error editing post:", error);
+        }
+    };
+
+    const replyToPost = async (parentId, content) => {
+        try {
+            const response = await api.post("/api/notes/", {
+                content: content,
+                parent: parentId
+            });
+            if (response.status === 201) {
+                getPosts();
+            }
+        } catch (error) {
+            console.error("Error replying to post:", error);
+        }
+    };
+
+    const createPost = (e) => {
+        e.preventDefault();
         api.post("/api/notes/", {
-            title: customerName,
-            content: orderDetails
-        }).then((res) => {
-            if (res.status === 201) alert("Post created!")
-            else alert("Failed to submit post.")
-            getOrders();
-        }).catch((error) => alert("Error submitting post."))
-    }
+            title: postTitle,
+            content: postContent
+        })
+        .then((res) => {
+            if (res.status === 201) {
+                getPosts();
+                setPostTitle("");
+                setPostContent("");
+            }
+        })
+        .catch((error) => console.error("Error creating post:", error));
+    };
 
     return (
-        <div className="home-page">
-            <header className="cafe-header">
-                <h1> Flicks 🎬</h1>
-                <p className="subtitle">Watch more. Share your take.</p>
+        <div className="movie-review-page">
+            <header className="page-header">
+                <h1>Flicks</h1>
+                <p className="tagline">Discover. Review. Share.</p>
             </header>
 
-            <section className="orders-section">
-            <h2>📋 Recent Posts</h2>
-
-            {randomMovie ? (
-                <div className="random-movie-card">
-                    <h3>{randomMovie.Title}</h3>
-                    {randomMovie.Poster && (
-                        <img 
-                            src={randomMovie.Poster} 
-                            alt={randomMovie.Title} 
-                            style={{ width: "200px", height: "auto", borderRadius: "8px" }} 
-                        />
+            <div className="main-content-grid">
+                {/* Left Column - Featured Film */}
+                <section className="daily-recommendation">
+                    <h2>Today's Featured Film</h2>
+                    {dailyMovie && (
+                        <div className="featured-movie">
+                            <div className="movie-poster">
+                                <img 
+                                    src={dailyMovie.Poster} 
+                                    alt={dailyMovie.Title}
+                                    onError={(e) => e.target.src = '/placeholder-poster.jpg'}
+                                />
+                            </div>
+                            <div className="movie-details">
+                                <h3>{dailyMovie.Title} <span className="year">({dailyMovie.Year})</span></h3>
+                                <div className="movie-meta">
+                                    <span>{dailyMovie.Runtime}</span> • 
+                                    <span>{dailyMovie.Genre}</span> • 
+                                    <span>⭐ {dailyMovie.imdbRating}</span>
+                                </div>
+                                <p className="movie-plot">{dailyMovie.Plot}</p>
+                                <div className="movie-credits">
+                                    <p><strong>Director:</strong> {dailyMovie.Director}</p>
+                                    <p><strong>Stars:</strong> {dailyMovie.Actors}</p>
+                                </div>
+                            </div>
+                        </div>
                     )}
-                </div>
-            ) : (
-                <p>Loading movie of the moment...</p>
-            )}
+                </section>
 
-                {randomMovie && randomMovie.Plot && <p>{randomMovie.Plot}</p>}
-                {orders.length > 0 ? (
-                    orders.map((order) => (
-                        <Note note={order} onDelete={deleteOrder} key={order.id} />
-                    ))
-                ) : (
-                    <p className="empty-text">No posts yet. Be the first!</p>
-                )}
-            </section>
+                {/* Right Column - Community Section */}
+                <section className="community-section">
+                    <h2>Community Reviews</h2>
+                    
+                    {/* Reviews List */}
+                    <div className="reviews-list">
+                        {posts.length > 0 ? (
+                            posts.map((post) => (
+                                <Note 
+                                    note={post} 
+                                    onDelete={deletePost}
+                                    onEdit={editPost}
+                                    onReply={replyToPost}
+                                    currentUser={currentUser}
+                                    key={post.id} 
+                                />
+                            ))
+                        ) : (
+                            <p className="empty-state">No reviews yet. Be the first to share your thoughts!</p>
+                        )}
+                    </div>
 
-            <section className="new-order-section">
-                <h2>➕ Add Post</h2>
-                <form onSubmit={createOrder}>
-                    <label htmlFor="customerName">Subject</label>
-                    <input
-                        type="text"
-                        id="customerName"
-                        required
-                        onChange={(e) => setCustomerName(e.target.value)}
-                        value={customerName}
-                    />
+                    {/* Add Review Form */}
+                    <div className="create-review">
+                        <h3>Share Your Thoughts</h3>
+                        <form onSubmit={createPost}>
+                            <input
+                                type="text"
+                                placeholder="What movie are you reviewing?"
+                                required
+                                value={postTitle}
+                                onChange={(e) => setPostTitle(e.target.value)}
+                                className="review-title-input"
+                            />
 
-                    <label htmlFor="orderDetails">Description</label>
-                    <textarea
-                        id="orderDetails"
-                        name="orderDetails"
-                        required
-                        value={orderDetails}
-                        onChange={(e) => setOrderDetails(e.target.value)}
-                    ></textarea>
+                            <textarea
+                                placeholder="Write your review..."
+                                required
+                                value={postContent}
+                                onChange={(e) => setPostContent(e.target.value)}
+                                className="review-content-input"
+                            ></textarea>
 
-                    <input type="submit" value="Add Post" />
-                </form>
-            </section>
+                            <button type="submit" className="submit-review">
+                                Post Review
+                            </button>
+                        </form>
+                    </div>
+                </section>
+            </div>
         </div>
-    )
-}
+    );
+};
 
-export default ActiveOrders
+export default MovieReviews;

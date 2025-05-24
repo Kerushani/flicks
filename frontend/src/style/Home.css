@@ -1,8 +1,8 @@
 /* Global font and background */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #0f0f1a; /* Near-black */
-  color: #d6ccff; /* Soft lavender */
+  background-color: #0a0a0a; /* Deeper black */
+  color: #e0e0e0; /* Light gray for better readability */
   margin: 0;
   padding: 0;
 }
@@ -16,23 +16,24 @@ body {
 .notes-section h2 {
   font-size: 26px;
   font-weight: 700;
-  color: #a586ff; /* Light purple */
+  color: #9370DB; /* Soft purple */
 }
 
 /* Individual note styling */
 .note {
-  background-color: #1a1a2e; /* Deep navy-purple */
-  border: 1px solid #3f3c63;
+  background-color: #141414; /* Very dark gray */
+  border: 1px solid #2a2a2a;
   margin: 16px auto;
   padding: 20px;
   border-radius: 10px;
   max-width: 600px;
-  box-shadow: 0 4px 12px rgba(120, 100, 180, 0.1);
-  transition: background-color 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
 }
 
 .note:hover {
-  background-color: #2a2644; /* Slightly brighter purple */
+  background-color: #1a1a1a; /* Slightly lighter on hover */
+  border-color: #9370DB; /* Purple accent on hover */
 }
 
 /* Title and content within note */
@@ -40,31 +41,31 @@ body {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 6px;
-  color: #c7bfff;
+  color: #ffffff;
 }
 
 .note-content {
   font-size: 15px;
-  color: #b8b0e0;
+  color: #b8b8b8;
   line-height: 1.6;
 }
 
 /* Note creation form */
 form {
-  background-color: #1c1c2f;
+  background-color: #141414;
   padding: 32px 28px;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(100, 80, 160, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   max-width: 500px;
   margin: 40px auto;
-  box-sizing: border-box;
+  border: 1px solid #2a2a2a;
 }
 
 /* Form header */
 form h2 {
   font-size: 24px;
   margin-bottom: 24px;
-  color: #b89cff;
+  color: #9370DB;
   text-align: center;
 }
 
@@ -74,32 +75,33 @@ form label {
   display: block;
   margin-bottom: 6px;
   margin-top: 20px;
-  color: #d6ccff;
+  color: #e0e0e0;
 }
 
 form input,
 form textarea {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #4a406b;
+  border: 1px solid #2a2a2a;
   border-radius: 6px;
   font-size: 15px;
-  background-color: #2a2644;
-  color: #f5f2ff;
-  transition: border-color 0.2s ease;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  transition: all 0.2s ease;
   box-sizing: border-box;
   resize: vertical;
 }
 
 form input:focus,
 form textarea:focus {
-  border-color: #a586ff;
+  border-color: #9370DB;
   outline: none;
+  box-shadow: 0 0 0 1px #9370DB33;
 }
 
 /* Submit button */
 form input[type="submit"] {
-  background-color: #7b4bff;
+  background-color: #9370DB;
   color: #ffffff;
   padding: 12px 18px;
   border: none;
@@ -107,12 +109,13 @@ form input[type="submit"] {
   cursor: pointer;
   font-size: 16px;
   margin-top: 28px;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
   width: 100%;
 }
 
 form input[type="submit"]:hover {
-  background-color: #5930c4;
+  background-color: #7B68EE;
+  transform: translateY(-1px);
 }
 
 .home-page {
@@ -129,12 +132,12 @@ form input[type="submit"]:hover {
 
 .cafe-header h1 {
   font-size: 2.5rem;
-  color: #b89cff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  text-shadow: 0 0 20px #9370DB33;
 }
 
 .subtitle {
-  color: #a391c4;
+  color: #888888;
   font-size: 1rem;
   margin-top: 8px;
   font-style: italic;
@@ -147,7 +150,7 @@ form input[type="submit"]:hover {
 
 .empty-text {
   text-align: center;
-  color: #8f88a3;
+  color: #666666;
   font-style: italic;
   padding: 20px 0;
 }
@@ -170,68 +173,70 @@ form input[type="submit"]:hover {
 
 .welcome-title {
   font-size: 2.5rem;
-  color: #d6ccff;
+  color: #ffffff;
   margin-bottom: 20px;
 }
 
 .welcome-description {
   font-size: 1.2rem;
-  color: #bcb3d6;
+  color: #b8b8b8;
   margin-bottom: 30px;
 }
 
 .cta-button {
   text-decoration: none;
-  background-color: #7b4bff;
+  background-color: #9370DB;
   color: white;
   padding: 12px 24px;
   font-size: 1.1rem;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .cta-button:hover {
-  background-color: #5930c4;
+  background-color: #7B68EE;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(147, 112, 219, 0.2);
 }
 
 /* style/Welcome.css */
 .welcome-screen {
-  /* flex-grow: 1; */
-  /* background: linear-gradient(135deg, #121212, #1f1b2e); */
-  color: #e5e5ff;
+  color: #ffffff;
   font-family: 'Roboto', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
   padding: 40px;
+  background-color: #0a0a0a;
 }
 
 .welcome-card {
-  background-color: rgba(35, 30, 55, 0.95);
+  background-color: #141414;
   padding: 50px 40px;
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(120, 100, 220, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   animation: fadeInScale 0.6s ease-out;
   max-width: 640px;
   width: 100%;
+  border: 1px solid #2a2a2a;
 }
 
 .welcome-card h1 {
   font-size: 2.6rem;
-  color: #c3aaff;
+  color: #ffffff;
   margin-bottom: 20px;
 }
 
 .welcome-subtitle {
   font-size: 1.25rem;
-  color: #d9cfff;
+  color: #e0e0e0;
   margin-bottom: 16px;
 }
 
 .welcome-tip {
   font-size: 1rem;
-  color: #a89bc4;
+  color: #888888;
   opacity: 0.8;
 }
 

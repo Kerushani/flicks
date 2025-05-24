@@ -1,59 +1,227 @@
 /* Note container styling */
 .note-container {
-  font-family: 'Roboto', sans-serif;
-  background-color: #2e2b47; /* Dark purple with a touch of gray */
-  padding: 18px;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #141414;
+  padding: 20px;
   margin: 18px 0;
-  border: 1px solid #2e2b47;
-  border-radius: 14px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Darker shadow for depth */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
-/* Hover effect for note container */
 .note-container:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+  border-color: #2a2a2a;
+  background-color: #1a1a1a;
+}
+
+/* Note header styling */
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #2a2a2a;
+}
+
+.author-avatar.small {
+  width: 30px;
+  height: 30px;
+}
+
+.author-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 /* Note title styling */
 .note-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color:  #b0a0b7; /* Deep purple for the title */
-  margin-bottom: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* Note author and time styling */
+.note-author {
+  font-size: 0.9rem;
+  color: #888888;
+  margin: 0;
+}
+
+.note-time {
+  font-size: 0.85rem;
+  color: #666666;
 }
 
 /* Note content styling */
 .note-content {
-  font-size: 1.1rem;
-  color: #c4a5d1; /* Light purple-gray for content */
-  margin-bottom: 10px;
-  line-height: 1.7;
+  font-size: 1rem;
+  color: #e0e0e0;
+  margin: 12px 0;
+  line-height: 1.6;
 }
 
-/* Note date styling */
-.note-date {
+/* Note footer styling */
+.note-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.note-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Button styling */
+.action-button {
+  background-color: transparent;
+  color: #888888;
+  border: 1px solid #2a2a2a;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
   font-size: 0.9rem;
-  color: #b0a0b7; /* Soft muted lavender-gray */
+  font-weight: 500;
+  font-family: 'Open Sans', sans-serif;
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: #2a2a2a;
+  color: #ffffff;
+}
+
+.action-button.delete-button:hover {
+  background-color: #9370DB;
+  border-color: #9370DB;
+}
+
+.action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Edit textarea styling */
+.edit-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-family: 'Open Sans', sans-serif;
+  resize: vertical;
+  margin: 8px 0;
+}
+
+/* Reply section styling */
+.reply-form {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.reply-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-family: 'Open Sans', sans-serif;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.reply-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Replies section styling */
+.replies-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.reply {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+}
+
+.reply-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.reply-author {
+  font-size: 0.9rem;
+  color: #ffffff;
+  margin-left: 8px;
+}
+
+.reply-time {
+  font-size: 0.8rem;
+  color: #666666;
+}
+
+.reply-content {
+  font-size: 0.95rem;
+  color: #e0e0e0;
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+/* Show replies button */
+.show-replies-button {
+  background: transparent;
+  border: none;
+  color: #888888;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.show-replies-button:hover {
+  color: #ffffff;
+}
+
+/* Edited tag */
+.edited-tag {
+  font-size: 0.85rem;
+  color: #666666;
   font-style: italic;
 }
 
-/* Delete button styling */
-.delete-button {
-  background: linear-gradient(135deg, #1c1a30, #3e3b5b); /* Dark purple to black gradient */
-  color: white;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: bold;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Delete button hover effect */
-.delete-button:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Darker shadow on hover */
+.edited-tag.small {
+  font-size: 0.8rem;
 }

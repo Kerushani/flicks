@@ -1,61 +1,63 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
-from rest_framework import generics
-from .serializers import UserSerializer, NoteSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Note
+from rest_framework import generics, permissions, status
+from .serializers import UserSerializer, NoteSerializer, UserProfileSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import requests
+from .models import Note, UserProfile
 
 class NoteListCreate(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        return Note.objects.all()
-    
+        return Note.objects.filter(parent=None).order_by('-created_at')
+
     def perform_create(self, serializer):
-        if serializer.is_valid():
-            serializer.save(author=self.request.user)
-        else:
-            print(serializer.errors)
+        serializer.save(author=self.request.user)
+
+class NoteDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Note.objects.filter(author=self.request.user)
 
 class NoteDelete(generics.DestroyAPIView):
+    queryset = Note.objects.all()
     serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        # user can only delete note if they are the author
-        return Note.objects.filter(author=user)
+        return Note.objects.filter(author=self.request.user)
 
 # Create your views here.
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
 
 class UserProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
-    
+
+    def put(self, request):
+        profile = request.user.profile
+        serializer = UserProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class SearchOMDbView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def get(self, request):
-        query = request.GET.get("q")
-        if not query:
-            return Response({"error": "Missing search query"}, status=400)
-        url = f"http://www.omdbapi.com/?apikey=1e75925c&s={query}"
-        response = requests.get(url)
-
-        if response.status_code != 200:
-            return Response({"error": "OMDb API request failed."}, status=500)
+        query = request.GET.get('query', '')
+        api_key = '1e75925c'  # Consider moving this to environment variables
         
-        data = response.json()
-        return Response(data)
+        response = requests.get(f'http://www.omdbapi.com/?t={query}&apikey={api_key}')
+        return Response(response.json())
