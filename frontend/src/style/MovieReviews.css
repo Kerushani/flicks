@@ -136,24 +136,18 @@
   font-weight: 600;
 }
 
-/* Reviews List */
 .reviews-list {
   flex: 1;
   overflow-y: auto;
   padding-right: 15px;
   margin-bottom: 10px;
   min-height: 100px;
-  resize: vertical;
 }
 
-/* Create Review Section */
 .create-review {
   border-top: 1px solid #2a2a2a;
   padding-top: 15px;
   min-height: 150px;
-  max-height: 40%;
-  overflow-y: auto;
-  resize: vertical;
 }
 
 .create-review h3 {
@@ -163,59 +157,67 @@
   font-weight: 600;
 }
 
-.review-title-input {
+.review-form {
   width: 100%;
-  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.review-title-input,
+.review-content-input {
+  width: 100%;
+  padding: 12px;
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
-  border-radius: 6px;
+  border-radius: 8px;
   color: #ffffff;
   font-size: 1rem;
-  margin-bottom: 10px;
   font-family: 'Open Sans', sans-serif;
+  transition: all 0.2s ease;
+}
+
+.review-title-input {
+  height: 45px;
 }
 
 .review-content-input {
-  width: 100%;
-  min-height: 60px;
-  padding: 10px;
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  border-radius: 6px;
-  color: #ffffff;
-  font-size: 1rem;
-  margin-bottom: 10px;
-  font-family: 'Open Sans', sans-serif;
+  min-height: 120px;
   resize: vertical;
+  line-height: 1.5;
+}
+
+.review-title-input:focus,
+.review-content-input:focus {
+  outline: none;
+  border-color: #9370DB;
+  box-shadow: 0 0 0 2px rgba(147, 112, 219, 0.1);
 }
 
 .submit-review {
-  background: #1a1a1a;
+  background: #9370DB;
   color: #ffffff;
-  border: 1px solid #2a2a2a;
-  padding: 8px 16px;
-  border-radius: 6px;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
   font-family: 'Open Sans', sans-serif;
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
-.submit-review:hover {
-  background: #9370DB;
-  border-color: #9370DB;
+.submit-review:hover:not(:disabled) {
+  background: #7B68EE;
   transform: translateY(-1px);
 }
 
-/* Resize handle styling */
-.reviews-list::-webkit-resizer,
-.create-review::-webkit-resizer {
-  background-color: #2a2a2a;
-  border: 1px solid #3a3a3a;
-  border-radius: 2px;
+.submit-review:disabled {
+  background: #4a4a4a;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
-/* Scrollbar styling */
 .reviews-list::-webkit-scrollbar,
 .create-review::-webkit-scrollbar {
   width: 8px;
@@ -231,11 +233,6 @@
 .create-review::-webkit-scrollbar-thumb {
   background: #2a2a2a;
   border-radius: 4px;
-}
-
-.reviews-list::-webkit-scrollbar-thumb:hover,
-.create-review::-webkit-scrollbar-thumb:hover {
-  background: #3a3a3a;
 }
 
 .empty-state {

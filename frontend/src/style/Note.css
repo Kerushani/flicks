@@ -1,21 +1,12 @@
-/* Note container styling */
 .note-container {
   font-family: 'Open Sans', sans-serif;
   background-color: #141414;
   padding: 20px;
   margin: 18px 0;
-  border: 1px solid #2a2a2a;
   border-radius: 12px;
-  transition: all 0.3s ease;
   box-sizing: border-box;
 }
 
-.note-container:hover {
-  border-color: #2a2a2a;
-  background-color: #1a1a1a;
-}
-
-/* Note header styling */
 .note-header {
   display: flex;
   justify-content: space-between;
@@ -67,7 +58,6 @@
   color: #666666;
 }
 
-/* Note content styling */
 .note-content {
   font-size: 1rem;
   color: #e0e0e0;
@@ -75,7 +65,6 @@
   line-height: 1.6;
 }
 
-/* Note footer styling */
 .note-footer {
   display: flex;
   justify-content: space-between;
@@ -90,28 +79,24 @@
   gap: 8px;
 }
 
-/* Button styling */
 .action-button {
-  background-color: transparent;
-  color: #888888;
-  border: 1px solid #2a2a2a;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  border: none;
   padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 500;
   font-family: 'Open Sans', sans-serif;
-  transition: all 0.2s ease;
 }
 
 .action-button:hover {
   background-color: #2a2a2a;
-  color: #ffffff;
 }
 
 .action-button.delete-button:hover {
   background-color: #9370DB;
-  border-color: #9370DB;
 }
 
 .action-button:disabled {
@@ -119,7 +104,6 @@
   cursor: not-allowed;
 }
 
-/* Edit textarea styling */
 .edit-textarea {
   width: 100%;
   min-height: 100px;
@@ -134,7 +118,6 @@
   margin: 8px 0;
 }
 
-/* Reply section styling */
 .reply-form {
   margin-top: 16px;
   padding-top: 16px;
@@ -166,7 +149,6 @@
   box-sizing: border-box;
 }
 
-/* Replies section styling */
 .replies-section {
   margin-top: 16px;
   padding-top: 16px;
@@ -177,12 +159,11 @@
 
 .reply {
   background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
   padding: 12px;
   margin: 8px 0;
   width: 100%;
   box-sizing: border-box;
+  border-radius: 8px;
 }
 
 .reply-header {
@@ -210,7 +191,6 @@
   line-height: 1.5;
 }
 
-/* Show replies button */
 .show-replies-button {
   background: transparent;
   border: none;
@@ -236,19 +216,7 @@
   font-size: 0.8rem;
 }
 
-.reply-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .action-button.small {
   padding: 4px 8px;
   font-size: 0.8rem;
-}
-
-.action-button.delete-button.small:hover {
-  background-color: #9370DB;
-  border-color: #9370DB;
-  color: #ffffff;
 }

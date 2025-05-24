@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Note, UserProfile
+from .models import Note, UserProfile, WatchlistItem
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,7 +50,7 @@ class NoteSerializer(serializers.ModelSerializer):
         try:
             return obj.author.profile.avatar
         except UserProfile.DoesNotExist:
-            return f'https://api.dicebear.com/7.x/bottts/svg?seed={obj.author.username}'
+            return f'https://api.dicebear.com/7.x/initials/svg?seed={obj.author.username}&backgroundColor=9370DB'
 
 class NoteReplySerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(source='author.username', read_only=True)
@@ -66,4 +66,10 @@ class NoteReplySerializer(serializers.ModelSerializer):
         try:
             return obj.author.profile.avatar
         except UserProfile.DoesNotExist:
-            return f'https://api.dicebear.com/7.x/bottts/svg?seed={obj.author.username}'
+            return f'https://api.dicebear.com/7.x/initials/svg?seed={obj.author.username}&backgroundColor=9370DB'
+
+class WatchlistItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WatchlistItem
+        fields = ['id', 'imdb_id', 'title', 'year', 'poster', 'added_at', 'watched', 'rating', 'notes', 'imdb_rating']
+        read_only_fields = ['added_at']

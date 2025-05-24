@@ -23,7 +23,7 @@ const MovieReviews = () => {
 
     const getDailyMovie = async () => {
         const today = new Date().toISOString().split('T')[0];
-                const savedMovie = localStorage.getItem('dailyMovie');
+        const savedMovie = localStorage.getItem('dailyMovie');
         const savedDate = localStorage.getItem('movieDate');
         
         if (savedMovie && savedDate === today) {
@@ -111,6 +111,9 @@ const MovieReviews = () => {
 
     const createPost = (e) => {
         e.preventDefault();
+        if (!postTitle.trim() || !postContent.trim()) {
+            return;
+        }
         api.post("/api/notes/", {
             title: postTitle,
             content: postContent
@@ -169,7 +172,7 @@ const MovieReviews = () => {
                     {/* Add Review Form */}
                     <div className="create-review">
                         <h3>Share Your Thoughts</h3>
-                        <form onSubmit={createPost}>
+                        <form onSubmit={createPost} className="review-form">
                             <input
                                 type="text"
                                 placeholder="Main highlight..."
@@ -185,9 +188,10 @@ const MovieReviews = () => {
                                 value={postContent}
                                 onChange={(e) => setPostContent(e.target.value)}
                                 className="review-content-input"
+                                rows="4"
                             ></textarea>
 
-                            <button type="submit" className="submit-review">
+                            <button type="submit" className="submit-review" disabled={!postTitle.trim() || !postContent.trim()}>
                                 Post Review
                             </button>
                         </form>

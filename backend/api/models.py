@@ -5,7 +5,7 @@ from django.utils import timezone
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    avatar = models.URLField(default='https://api.dicebear.com/7.x/bottts/svg')  # Default avatar URL
+    avatar = models.URLField(default='https://api.dicebear.com/7.x/initials/svg')  # Default avatar URL
     bio = models.TextField(max_length=500, blank=True)
 
     def __str__(self):
@@ -13,9 +13,28 @@ class UserProfile(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.avatar:
-            # Generate unique avatar URL using username
-            self.avatar = f'https://api.dicebear.com/7.x/bottts/svg?seed={self.user.username}'
+            # Generate unique avatar URL using username and initials style
+            self.avatar = f'https://api.dicebear.com/7.x/initials/svg?seed={self.user.username}&backgroundColor=9370DB'
         super().save(*args, **kwargs)
+
+class WatchlistItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='watchlist')
+    imdb_id = models.CharField(max_length=20)
+    title = models.CharField(max_length=200)
+    year = models.CharField(max_length=4)
+    poster = models.URLField(max_length=500)
+    added_at = models.DateTimeField(auto_now_add=True)
+    watched = models.BooleanField(default=False)
+    rating = models.IntegerField(null=True, blank=True)
+    notes = models.TextField(blank=True)
+    imdb_rating = models.CharField(max_length=4, blank=True, null=True)
+
+    class Meta:
+        ordering = ['-added_at']
+        unique_together = ['user', 'imdb_id']
+
+    def __str__(self):
+        return f"{self.title} ({self.year}) - {self.user.username}'s list"
 
 class Note(models.Model):
     title = models.CharField(max_length=100)

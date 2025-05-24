@@ -6,24 +6,34 @@
   align-items: center;
   justify-content: center;
   margin: 50px auto;
-  padding: 30px;
-  border-radius: 12px;
-  max-width: 420px;
+  padding: 40px 50px;
+  border-radius: 16px;
+  max-width: 480px;
+  width: 100%;
   background: #141414;
   border: 1px solid #2a2a2a;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .form-container:hover {
   transform: scale(1.01);
+  border-color: #9370DB;
+}
+
+.form-container h1 {
+  font-size: 2.2rem;
+  color: #ffffff;
+  margin-bottom: 30px;
+  font-weight: 600;
 }
 
 .form-input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 14px 18px;
   margin: 12px 0;
   border: 1px solid #2a2a2a;
-  border-radius: 8px;
+  border-radius: 10px;
   box-sizing: border-box;
   font-size: 16px;
   background-color: #1a1a1a;
@@ -32,22 +42,20 @@
   transition: all 0.2s ease;
 }
 
-/* Input focus state */
 .form-input:focus {
   border-color: #9370DB;
   outline: none;
-  box-shadow: 0 0 0 1px rgba(147, 112, 219, 0.1);
+  box-shadow: 0 0 0 2px rgba(147, 112, 219, 0.1);
 }
 
-/* Submit button styling */
 .form-button {
   width: 100%;
-  padding: 12px;
-  margin-top: 20px;
-  background: #1a1a1a;
+  padding: 14px;
+  margin-top: 25px;
+  background: #9370DB;
   color: white;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
@@ -55,9 +63,8 @@
   transition: all 0.2s ease;
 }
 
-/* Button hover effect */
 .form-button:hover {
-  background: #9370DB;
-  border-color: #9370DB;
-  transform: translateY(-1px);
+  background: #7B68EE;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(147, 112, 219, 0.2);
 }

@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework import generics, permissions, status
-from .serializers import UserSerializer, NoteSerializer, UserProfileSerializer
+from .serializers import UserSerializer, NoteSerializer, UserProfileSerializer, WatchlistItemSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import requests
-from .models import Note, UserProfile
+from .models import Note, UserProfile, WatchlistItem
 import os
 
 class NoteListCreate(generics.ListCreateAPIView):
@@ -55,12 +55,68 @@ class UserProfileView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SearchOMDbView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
     def get(self, request):
-        query = request.GET.get('query', '')
+        query = request.GET.get('q', '').strip()
+        if not query:
+            return Response(
+                {'Search': []}, 
+                status=status.HTTP_200_OK
+            )
+            
         api_key = '1e75925c'
-        
-        response = requests.get(f'http://www.omdbapi.com/?t={query}&apikey={api_key}')
-        return Response(response.json())
+        try:
+            # First get search results
+            search_response = requests.get(
+                'http://www.omdbapi.com/',
+                params={
+                    's': query,
+                    'apikey': api_key,
+                    'type': 'movie',
+                },
+                timeout=5
+            )
+            search_response.raise_for_status()
+            search_data = search_response.json()
+            
+            if search_data.get('Response') == 'False':
+                return Response(
+                    {'Search': []},
+                    status=status.HTTP_200_OK
+                )
+            
+            # Get detailed info for each movie including rating
+            if 'Search' in search_data:
+                detailed_results = []
+                for movie in search_data['Search'][:10]:  # Limit to first 10 results
+                    detail_response = requests.get(
+                        'http://www.omdbapi.com/',
+                        params={
+                            'i': movie['imdbID'],
+                            'apikey': api_key,
+                        },
+                        timeout=5
+                    )
+                    if detail_response.status_code == 200:
+                        detail_data = detail_response.json()
+                        movie['imdbRating'] = detail_data.get('imdbRating', 'N/A')
+                    detailed_results.append(movie)
+                
+                search_data['Search'] = detailed_results
+                
+            return Response(search_data)
+            
+        except requests.Timeout:
+            return Response(
+                {'error': 'Search request timed out. Please try again.'},
+                status=status.HTTP_504_GATEWAY_TIMEOUT
+            )
+        except requests.RequestException as e:
+            return Response(
+                {'error': f'Failed to fetch movies: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class SpotifyTokenView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -175,3 +231,49 @@ class SpotifySearchView(APIView):
                 {'error': str(e)}, 
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+class WatchlistView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        watchlist = WatchlistItem.objects.filter(user=request.user)
+        serializer = WatchlistItemSerializer(watchlist, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        # Add imdb_id validation
+        existing = WatchlistItem.objects.filter(
+            user=request.user, 
+            imdb_id=request.data.get('imdb_id')
+        ).first()
+        
+        if existing:
+            return Response(
+                {'error': 'Movie already in watchlist'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = WatchlistItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class WatchlistItemDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, pk, user):
+        return get_object_or_404(WatchlistItem, pk=pk, user=user)
+
+    def put(self, request, pk):
+        watchlist_item = self.get_object(pk, request.user)
+        serializer = WatchlistItemSerializer(watchlist_item, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        watchlist_item = self.get_object(pk, request.user)
+        watchlist_item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

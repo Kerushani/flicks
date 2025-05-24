@@ -1,13 +1,23 @@
 /* Global font and background */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #0a0a0a; /* Deeper black */
-  color: #e0e0e0; /* Light gray for better readability */
+  font-family: 'Open Sans', sans-serif;
+  background-color: #0a0a0a;
+  color: #e0e0e0;
   margin: 0;
   padding: 0;
 }
 
-/* Notes section heading */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  background-color: #0a0a0a;
+  overflow-y: auto;
+  min-height: 100vh;
+}
+
 .notes-section {
   text-align: center;
   margin-bottom: 2rem;
@@ -16,24 +26,15 @@ body {
 .notes-section h2 {
   font-size: 26px;
   font-weight: 700;
-  color: #9370DB; /* Soft purple */
+  color: #9370DB;
 }
 
-/* Individual note styling */
 .note {
-  background-color: #141414; /* Very dark gray */
-  border: 1px solid #2a2a2a;
+  background-color: #141414;
   margin: 16px auto;
   padding: 20px;
   border-radius: 10px;
   max-width: 600px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
-}
-
-.note:hover {
-  background-color: #1a1a1a; /* Slightly lighter on hover */
-  border-color: #9370DB; /* Purple accent on hover */
 }
 
 /* Title and content within note */
@@ -50,15 +51,12 @@ body {
   line-height: 1.6;
 }
 
-/* Note creation form */
 form {
   background-color: #141414;
   padding: 32px 28px;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   max-width: 500px;
   margin: 40px auto;
-  border: 1px solid #2a2a2a;
 }
 
 /* Form header */
@@ -99,7 +97,6 @@ form textarea:focus {
   box-shadow: 0 0 0 1px #9370DB33;
 }
 
-/* Submit button */
 form input[type="submit"] {
   background-color: #9370DB;
   color: #ffffff;
@@ -109,13 +106,44 @@ form input[type="submit"] {
   cursor: pointer;
   font-size: 16px;
   margin-top: 28px;
-  transition: all 0.2s ease;
   width: 100%;
 }
 
 form input[type="submit"]:hover {
   background-color: #7B68EE;
-  transform: translateY(-1px);
+}
+
+.welcome-screen {
+  color: #ffffff;
+  font-family: 'Open Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 40px;
+  background-color: #0a0a0a;
+}
+
+.welcome-card {
+  background-color: #141414;
+  padding: 50px 40px;
+  border-radius: 16px;
+  max-width: 640px;
+  width: 100%;
+  text-align: center;
+  border: 1px solid #2a2a2a;
+}
+
+.welcome-card h1 {
+  font-size: 2.6rem;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.welcome-subtitle {
+  font-size: 1.25rem;
+  color: #e0e0e0;
+  margin-bottom: 16px;
 }
 
 .home-page {
@@ -153,16 +181,6 @@ form input[type="submit"]:hover {
   color: #666666;
   font-style: italic;
   padding: 20px 0;
-}
-
-.main-content {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  background-color: #0f0f1a;
-  overflow-y: auto;
 }
 
 .welcome-container {
@@ -240,7 +258,6 @@ form input[type="submit"]:hover {
   opacity: 0.8;
 }
 
-/* Animation */
 @keyframes fadeInScale {
   from {
     opacity: 0;
