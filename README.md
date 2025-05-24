@@ -1,6 +1,6 @@
 # Flicks 
 
-A movie reflection and review app where users can explore a daily film pick and share their thoughts. Watch more. Share your take.
+A movie reflection and review app where users can explore a daily film pick and share their thoughts.
 
 **Live Demo**: [https://reviews-app123.vercel.app/register](https://reviews-app123.vercel.app/register)
 
@@ -16,3 +16,4 @@ A movie reflection and review app where users can explore a daily film pick and 
 - **Django** + **Django REST Framework**
 - **PostgreSQL**
 
+Note: The backend is hosted on Render’s free tier, which may result in a short delay (a few seconds) when registering a new user due to cold starts after periods of inactivity. I've included a demo video in case the website encounters issues handling requests.

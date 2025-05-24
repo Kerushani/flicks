@@ -10,6 +10,7 @@ const Profile = () => {
     const [watchlist, setWatchlist] = useState([]);
     const [activeTab, setActiveTab] = useState("watchlist");
     const [selectedMovie, setSelectedMovie] = useState(null);
+    const [movieDetails, setMovieDetails] = useState(null);
     const [isSlideoverOpen, setIsSlideoverOpen] = useState(false);
     const [typingTimeout, setTypingTimeout] = useState(null);
     const [localNotes, setLocalNotes] = useState("");
@@ -18,23 +19,40 @@ const Profile = () => {
     const [postContent, setPostContent] = useState("");
 
     useEffect(() => {
-        getUserProfile();
-        getWatchlist();
+        const loadUserData = async () => {
+            setLoading(true);
+            try {
+                await Promise.all([getUserProfile(), getWatchlist()]);
+            } catch (error) {
+                console.error("Failed to load user data:", error);
+                setError("Failed to load user data");
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        loadUserData();
     }, []);
 
-    const getUserProfile = () => {
-        api.get("/api/profile/")
-            .then((res) => res.data)
-            .then((data) => setProfile(data))
-            .catch(() => alert("Could not get user info"));
+    const getUserProfile = async () => {
+        try {
+            const response = await api.get("/api/profile/");
+            setProfile(response.data);
+            return response.data;
+        } catch (error) {
+            console.error("Could not get user info:", error);
+            throw error;
+        }
     };
 
     const getWatchlist = async () => {
         try {
             const response = await api.get("/api/watchlist/");
             setWatchlist(response.data);
+            return response.data;
         } catch (error) {
             console.error("Failed to fetch watchlist:", error);
+            throw error;
         }
     };
 
@@ -45,13 +63,18 @@ const Profile = () => {
                 title: movie.Title,
                 year: movie.Year,
                 poster: movie.Poster,
-                imdb_rating: movie.imdbRating
+                imdb_rating: movie.imdbRating || 'N/A'
             });
-            getWatchlist(); // Refresh the list
+            await getWatchlist(); // Refresh the list
             setResults([]); // Clear search results
             setQuery(""); // Clear search query
         } catch (error) {
-            alert("Failed to add movie to watchlist");
+            if (error.response?.data?.error === 'Movie already in watchlist') {
+                alert("This movie is already in your watchlist");
+            } else {
+                console.error("Failed to add movie:", error.response?.data || error.message);
+                alert("Failed to add movie to watchlist");
+            }
         }
     };
 
@@ -134,11 +157,22 @@ const Profile = () => {
         }
     };
 
-    const handleMovieClick = (movie) => {
+    const handleMovieClick = async (movie) => {
         setSelectedMovie(movie);
         setLocalNotes(movie.notes || "");
         setHasUnsavedChanges(false);
         setIsSlideoverOpen(true);
+        
+        try {
+            const response = await api.get(`/api/search/`, {
+                params: { q: movie.imdb_id }
+            });
+            if (response.data.Search && response.data.Search[0]) {
+                setMovieDetails(response.data.Search[0]);
+            }
+        } catch (error) {
+            console.error("Failed to fetch movie details:", error);
+        }
     };
 
     const handleNotesChange = (e) => {
@@ -165,84 +199,89 @@ const Profile = () => {
         setPostContent("");
     };
 
-    if (!profile) return <h1>Loading...</h1>;
+    if (loading && !profile) return <div className="loading-state">Loading...</div>;
+    if (error) return <div className="error-state">Error: {error}</div>;
+    if (!profile) return null;
 
     const filteredWatchlist = watchlist.filter(item => 
         activeTab === "watchlist" ? !item.watched : item.watched
     );
 
     return (
-        <div className="profile-page">
-            <aside className="profile-sidebar">
-                <div className="profile-info-card">
+        <div className="profile-container">
+            {/* Profile Header */}
+            <header className="profile-header">
+                <div className="profile-info">
                     <img
                         src={profile.profile?.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${profile.username}&backgroundColor=9370DB`}
                         alt="Profile"
                         className="profile-avatar"
                     />
-                    <h1 className="username">{profile.username}</h1>
-                    <p className="email">{profile.email}</p>
+                    <div className="profile-text">
+                        <h1 className="username">{profile.username}</h1>
+                        <p className="email">{profile.email}</p>
+                    </div>
                 </div>
-            </aside>
+            </header>
 
-            <main className="main-content">
-                <div className="watchlist-container">
-                    <div className="watchlist-header">
-                        <div className="search-section">
-                            <h2>Add Movies to Your Watchlist</h2>
-                            <div className="search-bar">
-                                <div className="search-input-container">
-                                    <input
-                                        type="text"
-                                        placeholder="Search for a movie..."
-                                        value={query}
-                                        onChange={handleSearchInputChange}
-                                        onKeyDown={handleKeyDown}
-                                        className="search-input"
+            {/* Main Content */}
+            <div className="profile-content">
+                {/* Search Widget */}
+                <div className="search-widget">
+                    <h2>Add to Watchlist</h2>
+                    <div className="search-bar">
+                        <input
+                            type="text"
+                            placeholder="Search for movies..."
+                            value={query}
+                            onChange={(e) => {
+                                setQuery(e.target.value);
+                                if (typingTimeout) clearTimeout(typingTimeout);
+                                if (e.target.value.trim()) {
+                                    const timeout = setTimeout(() => handleSearch(), 300);
+                                    setTypingTimeout(timeout);
+                                } else {
+                                    setResults([]);
+                                }
+                            }}
+                            className="search-input"
+                        />
+                        {loading && <div className="search-loading">Searching...</div>}
+                    </div>
+                    {results.length > 0 && (
+                        <div className="search-results">
+                            {results.map((movie) => (
+                                <div key={movie.imdbID} className="search-result-item" onClick={() => addToWatchlist(movie)}>
+                                    <img
+                                        src={movie.Poster === "N/A" ? "/placeholder-poster.jpg" : movie.Poster}
+                                        alt={movie.Title}
+                                        className="movie-poster"
                                     />
-                                    {loading && <div className="search-loading">Searching...</div>}
-                                    {results.length > 0 && (
-                                        <div className="search-dropdown">
-                                            {results.map((movie) => (
-                                                <div key={movie.imdbID} className="dropdown-item" onClick={() => {
-                                                    addToWatchlist(movie);
-                                                    setQuery('');
-                                                    setResults([]);
-                                                }}>
-                                                    <img
-                                                        src={movie.Poster === "N/A" ? "/placeholder-poster.jpg" : movie.Poster}
-                                                        alt={movie.Title}
-                                                        onError={(e) => {
-                                                            if (!e.target.dataset.fallback) {
-                                                                e.target.dataset.fallback = 'true';
-                                                                e.target.src = "/placeholder-poster.jpg";
-                                                            }
-                                                        }}
-                                                    />
-                                                    <div className="dropdown-item-info">
-                                                        <span className="movie-title">{movie.Title}</span>
-                                                        <div className="movie-meta">
-                                                            <span className="movie-year">({movie.Year})</span>
-                                                            {movie.imdbRating && movie.imdbRating !== 'N/A' && (
-                                                                <span className="movie-rating">⭐ {movie.imdbRating}</span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
+                                    <div className="movie-info">
+                                        <h3>{movie.Title}</h3>
+                                        <div className="movie-meta">
+                                            <span className="year">{movie.Year}</span>
+                                            {movie.imdbRating && movie.imdbRating !== 'N/A' && (
+                                                <span className="rating">⭐ {movie.imdbRating}</span>
+                                            )}
                                         </div>
-                                    )}
+                                    </div>
                                 </div>
-                                <button onClick={handleSearch}>Search</button>
-                            </div>
+                            ))}
                         </div>
+                    )}
+                </div>
 
+                {/* Watchlist Table */}
+                <div className="watchlist-widget">
+                    <div className="watchlist-header">
+                        <h2>My Movies</h2>
                         <div className="tabs">
                             <button
                                 className={activeTab === "watchlist" ? "active" : ""}
                                 onClick={() => setActiveTab("watchlist")}
                             >
-                                Watchlist
+                                Want to Watch
                             </button>
                             <button
                                 className={activeTab === "watched" ? "active" : ""}
@@ -253,10 +292,7 @@ const Profile = () => {
                         </div>
                     </div>
 
-                    {loading && <div className="loading">Loading...</div>}
-                    {error && <div className="error">{error}</div>}
-
-                    <div className="watchlist-table">
+                    <div className="table-container">
                         <table>
                             <thead>
                                 <tr>
@@ -269,38 +305,33 @@ const Profile = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredWatchlist.map((item) => (
-                                    <tr key={item.id} onClick={() => handleMovieClick(item)} className="movie-row">
+                                {filteredWatchlist.map((movie) => (
+                                    <tr key={movie.id} onClick={() => handleMovieClick(movie)} className="movie-row">
                                         <td className="poster-cell">
                                             <img
-                                                src={item.poster === "N/A" ? "/placeholder-poster.jpg" : item.poster}
-                                                alt={item.title}
-                                                onError={(e) => {
-                                                    if (!e.target.dataset.fallback) {
-                                                        e.target.dataset.fallback = 'true';
-                                                        e.target.src = "/placeholder-poster.jpg";
-                                                    }
-                                                }}
+                                                src={movie.poster === "N/A" ? "/placeholder-poster.jpg" : movie.poster}
+                                                alt={movie.title}
+                                                className="movie-poster"
                                             />
                                         </td>
-                                        <td>{item.title}</td>
-                                        <td>{item.year}</td>
-                                        <td>{item.imdb_rating ? `⭐ ${item.imdb_rating}` : '-'}</td>
+                                        <td className="title-cell">{movie.title}</td>
+                                        <td>{movie.year}</td>
+                                        <td>{movie.imdb_rating ? `⭐ ${movie.imdb_rating}` : '-'}</td>
                                         <td>
-                                            {item.watched ? (
+                                            {movie.watched ? (
                                                 <div className="rating-display">
-                                                    {item.rating ? `${item.rating} ⭐` : 'Not rated'}
+                                                    {movie.rating ? `${movie.rating} ⭐` : 'Not rated'}
                                                 </div>
                                             ) : '-'}
                                         </td>
                                         <td>
-                                            {!item.watched ? (
+                                            {!movie.watched ? (
                                                 <button
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        updateWatchlistItem(item.id, { watched: true });
+                                                        updateWatchlistItem(movie.id, { watched: true });
                                                     }}
-                                                    className="mark-watched"
+                                                    className="action-button watch-button"
                                                 >
                                                     Mark as Watched
                                                 </button>
@@ -308,9 +339,9 @@ const Profile = () => {
                                                 <button
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        removeFromWatchlist(item.id);
+                                                        removeFromWatchlist(movie.id);
                                                     }}
-                                                    className="remove-button"
+                                                    className="action-button remove-button"
                                                 >
                                                     Remove
                                                 </button>
@@ -320,54 +351,73 @@ const Profile = () => {
                                 ))}
                             </tbody>
                         </table>
+                        {filteredWatchlist.length === 0 && (
+                            <div className="empty-state">
+                                <p>No movies in your {activeTab === "watchlist" ? "watchlist" : "watched list"} yet.</p>
+                            </div>
+                        )}
                     </div>
                 </div>
-            </main>
+            </div>
 
-            {/* Slide-over Panel */}
             {isSlideoverOpen && selectedMovie && (
                 <div className="slideover-backdrop" onClick={() => {
                     if (hasUnsavedChanges) {
                         if (window.confirm("You have unsaved changes. Are you sure you want to close?")) {
                             setIsSlideoverOpen(false);
+                            setMovieDetails(null);
                         }
                     } else {
                         setIsSlideoverOpen(false);
+                        setMovieDetails(null);
                     }
                 }}>
                     <div className="slideover-panel" onClick={e => e.stopPropagation()}>
                         <div className="slideover-header">
                             <h3>{selectedMovie.title}</h3>
-                            <button 
-                                onClick={() => {
-                                    if (hasUnsavedChanges) {
-                                        if (window.confirm("You have unsaved changes. Are you sure you want to close?")) {
-                                            setIsSlideoverOpen(false);
-                                        }
-                                    } else {
-                                        setIsSlideoverOpen(false);
-                                    }
-                                }} 
-                                className="close-button"
-                            >
-                                ×
-                            </button>
+                            <button className="close-button" onClick={() => {
+                                setIsSlideoverOpen(false);
+                                setMovieDetails(null);
+                            }}>×</button>
                         </div>
                         <div className="slideover-content">
                             <div className="movie-details">
                                 <img
-                                    src={selectedMovie.poster === "N/A" ? "/placeholder-poster.jpg" : selectedMovie.poster}
+                                    src={selectedMovie.poster}
                                     alt={selectedMovie.title}
                                     className="detail-poster"
                                 />
                                 <div className="detail-info">
-                                    <p className="year">{selectedMovie.year}</p>
+                                    <div className="movie-header">
+                                        <p className="year">{selectedMovie.year}</p>
+                                        <p className="imdb-rating">IMDb: ⭐ {selectedMovie.imdb_rating}</p>
+                                    </div>
+                                    
+                                    {movieDetails && (
+                                        <>
+                                            <div className="movie-meta">
+                                                {movieDetails.Runtime && <span>{movieDetails.Runtime}</span>}
+                                                {movieDetails.Genre && <span>{movieDetails.Genre}</span>}
+                                            </div>
+                                            <p className="movie-plot">{movieDetails.Plot}</p>
+                                            <div className="movie-credits">
+                                                {movieDetails.Director && (
+                                                    <p><strong>Director:</strong> {movieDetails.Director}</p>
+                                                )}
+                                                {movieDetails.Actors && (
+                                                    <p><strong>Stars:</strong> {movieDetails.Actors}</p>
+                                                )}
+                                            </div>
+                                        </>
+                                    )}
+                                    
                                     {selectedMovie.watched && (
                                         <div className="rating-section">
-                                            <label>Rating:</label>
+                                            <label>Your Rating:</label>
                                             <select
                                                 value={selectedMovie.rating || ""}
                                                 onChange={(e) => updateWatchlistItem(selectedMovie.id, { rating: e.target.value })}
+                                                className="rating-select"
                                             >
                                                 <option value="">Select Rating</option>
                                                 {[1,2,3,4,5].map(num => (
@@ -386,9 +436,9 @@ const Profile = () => {
                                     )}
                                 </div>
                                 <textarea
-                                    placeholder="Add your thoughts about this movie..."
                                     value={localNotes}
                                     onChange={handleNotesChange}
+                                    placeholder="Add your thoughts about this movie..."
                                     className="notes-input"
                                 />
                                 <button 
@@ -405,337 +455,161 @@ const Profile = () => {
             )}
 
             <style jsx>{`
-                .profile-page {
-                    display: grid;
-                    grid-template-columns: minmax(300px, 400px) minmax(600px, 3fr);
-                    gap: 10px;
-                    width: 98%;
-                    max-width: 2000px;
+                .profile-container {
+                    max-width: 1400px;
                     margin: 0 auto;
-                    padding: 0;
-                    padding-top: 4rem;
+                    padding: 4rem 2rem 2rem 2rem;
+                    min-height: 100vh;
+                    width: 100%;
+                    box-sizing: border-box;
                 }
 
-                .profile-sidebar {
-                    position: sticky;
-                    top: 4rem;
-                    height: fit-content;
-                }
-
-                .profile-info-card {
+                .profile-header {
                     background: #141414;
-                    padding: 1rem;
-                    border-radius: 12px;
+                    border-radius: 16px;
+                    padding: 2rem;
+                    margin-bottom: 2rem;
                     border: 1px solid #2a2a2a;
-                    text-align: center;
-                    margin: 0;
+                }
+
+                .profile-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 2rem;
                 }
 
                 .profile-avatar {
                     width: 120px;
                     height: 120px;
                     border-radius: 50%;
-                    margin: 0 auto 0.75rem;
                     border: 3px solid #2a2a2a;
-                    background: #1a1a1a;
-                    padding: 0;
                     transition: all 0.2s ease;
                 }
 
-                .profile-avatar:hover {
-                    transform: scale(1.02);
-                    border-color: #9370DB;
-                    box-shadow: 0 0 20px rgba(147, 112, 219, 0.2);
+                .profile-text {
+                    flex: 1;
                 }
 
                 .username {
-                    font-size: 1.5rem;
+                    font-size: 2rem;
                     color: #ffffff;
-                    margin-bottom: 0.25rem;
+                    margin: 0;
                 }
 
                 .email {
                     color: #888888;
-                    font-size: 0.9rem;
-                    margin-bottom: 0;
+                    margin: 0.5rem 0 0;
+                    font-size: 1rem;
                 }
 
-                .main-content {
-                    min-width: 0;
-                }
-
-                .watchlist-container {
-                    background: #141414;
-                    border-radius: 12px;
-                    border: 1px solid #2a2a2a;
-                    padding: 1rem;
-                    margin: 0;
-                }
-
-                .watchlist-header {
-                    margin-bottom: 1rem;
-                }
-
-                .search-section {
-                    margin-bottom: 1rem;
-                }
-
-                .search-section h2 {
-                    color: #ffffff;
-                    margin-bottom: 0.75rem;
-                    font-size: 1.3rem;
-                    font-weight: 600;
-                }
-
-                .search-bar {
-                    display: flex;
-                    gap: 0.5rem;
-                    margin-bottom: 0;
+                .profile-content {
+                    display: grid;
+                    grid-template-columns: 320px minmax(0, 1fr);
+                    gap: 2rem;
+                    align-items: start;
                     position: relative;
                     width: 100%;
                 }
 
-                .search-input-container {
+                .search-widget {
+                    background: #141414;
+                    border-radius: 16px;
+                    padding: 1.25rem;
+                    border: 1px solid #2a2a2a;
+                    position: sticky;
+                    top: 2rem;
+                    display: flex;
+                    flex-direction: column;
+                    max-height: calc(100vh - 8rem);
+                    overflow: hidden;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+
+                .search-widget h2 {
+                    color: #ffffff;
+                    margin: 0 0 1rem;
+                    font-size: 1.3rem;
+                    flex-shrink: 0;
+                    padding: 0 0.25rem;
+                }
+
+                .search-bar {
                     position: relative;
-                    flex: 1;
-                    max-width: 450px;
+                    margin-bottom: 1rem;
+                    flex-shrink: 0;
+                    width: 100%;
+                    box-sizing: border-box;
                 }
 
                 .search-input {
                     width: 100%;
                     padding: 0.8rem 1rem;
-                    font-size: 1rem;
-                    border-radius: 8px;
-                    border: 2px solid #2a2a2a;
                     background: #1a1a1a;
-                    color: #ffffff;
-                    transition: all 0.2s ease;
-                }
-
-                .search-bar button {
-                    padding: 0.8rem 1.5rem;
-                    font-size: 1rem;
-                    background: #9370DB;
-                    color: white;
-                    border: none;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    white-space: nowrap;
-                    transition: all 0.2s ease;
-                    font-weight: 500;
-                    min-width: 100px;
-                    position: relative;
-                    z-index: 2;
-                }
-
-                .watchlist-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-                    gap: 2rem;
-                    padding: 1rem 0;
-                    margin-top: 2rem;
-                }
-
-                .watchlist-tabs {
-                    display: flex;
-                    gap: 1rem;
-                    margin-top: 0;
-                    border-bottom: 2px solid #2a2a2a;
-                    padding-bottom: 1.5rem;
-                }
-
-                .watchlist-tabs button {
-                    padding: 1rem 2rem;
-                    background: transparent;
-                    border: 2px solid #2a2a2a;
-                    border-radius: 12px;
-                    color: #888888;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    font-weight: 500;
-                    min-width: 140px;
-                    font-size: 1.1rem;
-                }
-
-                .watchlist-tabs button:hover {
-                    border-color: #9370DB;
-                    color: #9370DB;
-                }
-
-                .watchlist-tabs button.active {
-                    background: #9370DB;
-                    color: white;
-                    border-color: #9370DB;
-                }
-
-                .watchlist-card {
-                    background: #1a1a1a;
-                    border-radius: 12px;
-                    overflow: hidden;
-                    transition: all 0.2s ease;
                     border: 1px solid #2a2a2a;
-                }
-
-                .watchlist-card:hover {
-                    transform: translateY(-4px);
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-                    border-color: #9370DB;
-                }
-
-                .watchlist-card img {
-                    width: 100%;
-                    aspect-ratio: 2/3;
-                    object-fit: cover;
-                }
-
-                .watchlist-card-info {
-                    padding: 1.5rem;
-                }
-
-                .watchlist-card-info h3 {
-                    color: #ffffff;
-                    font-size: 1.1rem;
-                    margin-bottom: 0.8rem;
-                    line-height: 1.4;
-                }
-
-                .watchlist-card-info p {
-                    color: #888888;
-                    font-size: 1rem;
-                    margin-bottom: 1.2rem;
-                }
-
-                .mark-watched {
-                    width: 100%;
-                    padding: 0.9rem;
-                    background: #4CAF50;
-                    color: white;
-                    border: none;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    margin-bottom: 1rem;
-                    transition: all 0.2s ease;
-                    font-weight: 500;
-                    font-size: 1rem;
-                }
-
-                .mark-watched:hover {
-                    background: #45a049;
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
-                }
-
-                .rating-section select {
-                    width: 100%;
-                    padding: 0.9rem;
-                    background: #2a2a2a;
-                    color: white;
-                    border: none;
-                    border-radius: 10px;
-                    margin-bottom: 1rem;
-                    cursor: pointer;
-                    font-family: inherit;
-                    font-size: 1rem;
-                    appearance: none;
-                    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-                    background-repeat: no-repeat;
-                    background-position: right 1rem center;
-                    background-size: 0.8em auto;
-                }
-
-                .rating-section select:hover {
-                    background-color: #333333;
-                }
-
-                .notes-input {
-                    width: 100%;
-                    min-height: 100px;
-                    padding: 1rem;
-                    background: #2a2a2a;
-                    color: white;
-                    border: none;
-                    border-radius: 10px;
-                    margin-bottom: 1rem;
-                    resize: vertical;
-                    font-family: inherit;
-                    font-size: 1rem;
-                    line-height: 1.5;
-                    transition: all 0.2s ease;
-                }
-
-                .notes-input:focus {
-                    outline: none;
-                    background: #333333;
-                    box-shadow: 0 0 0 2px rgba(147, 112, 219, 0.3);
-                }
-
-                .remove-button {
-                    width: 100%;
-                    padding: 0.9rem;
-                    background: #ff4444;
-                    color: white;
-                    border: none;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    font-weight: 500;
-                    font-size: 1rem;
-                }
-
-                .remove-button:hover {
-                    background: #ff3333;
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.2);
-                }
-
-                .search-dropdown {
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    width: 100%;
-                    background: #1a1a1a;
-                    border: 2px solid #2a2a2a;
                     border-radius: 8px;
-                    max-height: 350px;
-                    overflow-y: auto;
-                    z-index: 1000;
-                    margin-top: 0.25rem;
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                    color: #ffffff;
+                    font-size: 1rem;
+                    transition: all 0.2s ease;
+                    box-sizing: border-box;
                 }
 
-                .dropdown-item {
+                .search-input:focus {
+                    outline: none;
+                    border-color: #9370DB;
+                    box-shadow: 0 0 0 2px rgba(147, 112, 219, 0.1);
+                }
+
+                .search-results {
+                    flex: 1;
+                    overflow-y: auto;
+                    margin: 0 -0.25rem;
+                    padding: 0 0.25rem;
+                    min-height: 0;
+                }
+
+                .search-result-item {
                     display: flex;
                     align-items: center;
+                    gap: 0.75rem;
                     padding: 0.75rem;
                     cursor: pointer;
-                    border-bottom: 1px solid #2a2a2a;
+                    background: #1a1a1a;
+                    border: 1px solid #2a2a2a;
+                    border-radius: 6px;
                     transition: all 0.2s ease;
+                    margin-bottom: 0.5rem;
+                    width: 100%;
+                    box-sizing: border-box;
                 }
 
-                .dropdown-item:last-child {
-                    border-bottom: none;
+                .search-result-item:last-child {
+                    margin-bottom: 0;
                 }
 
-                .dropdown-item img {
-                    width: 40px;
-                    height: 60px;
+                .search-result-item:hover {
+                    background: #242424;
+                    border-color: #9370DB;
+                }
+
+                .search-result-item img {
+                    width: 35px;
+                    height: 52px;
                     object-fit: cover;
                     border-radius: 4px;
-                    margin-right: 0.75rem;
+                    flex-shrink: 0;
                 }
 
-                .dropdown-item-info {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.25rem;
+                .movie-info {
                     flex: 1;
                     min-width: 0;
+                    padding: 0.25rem 0;
                 }
 
-                .movie-title {
+                .movie-info h3 {
+                    margin: 0;
+                    font-size: 0.9rem;
                     color: #ffffff;
-                    font-size: 0.95rem;
-                    font-weight: 500;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -743,101 +617,137 @@ const Profile = () => {
 
                 .movie-meta {
                     display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    margin-top: 2px;
-                }
-
-                .movie-year,
-                .movie-rating {
+                    gap: 0.75rem;
+                    margin-top: 0.25rem;
                     color: #888888;
-                    font-size: 0.85rem;
+                    font-size: 0.8rem;
                 }
 
-                .movie-rating {
+                .search-loading {
+                    text-align: center;
+                    color: #888888;
+                    padding: 0.5rem;
+                    font-style: italic;
+                    font-size: 0.9rem;
+                    flex-shrink: 0;
+                }
+
+                /* Custom scrollbar for search results */
+                .search-results::-webkit-scrollbar {
+                    width: 6px;
+                }
+
+                .search-results::-webkit-scrollbar-track {
+                    background: #1a1a1a;
+                    border-radius: 3px;
+                }
+
+                .search-results::-webkit-scrollbar-thumb {
+                    background: #2a2a2a;
+                    border-radius: 3px;
+                }
+
+                .search-results::-webkit-scrollbar-thumb:hover {
+                    background: #3a3a3a;
+                }
+
+                .watchlist-widget {
+                    background: #141414;
+                    border-radius: 16px;
+                    padding: 1.5rem;
+                    border: 1px solid #2a2a2a;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+
+                .watchlist-header {
                     display: flex;
+                    justify-content: space-between;
                     align-items: center;
-                    gap: 3px;
-                    color: #ffd700;
+                    margin-bottom: 2rem;
                 }
 
-                @media (max-width: 1024px) {
-                    .profile-page {
-                        grid-template-columns: 1fr;
-                        gap: 10px;
-                        padding: 0;
-                        padding-top: 4rem;
-                    }
-
-                    .profile-sidebar {
-                        position: relative;
-                        top: 0;
-                        max-width: 400px;
-                        margin: 0 auto;
-                    }
-                }
-
-                @media (max-width: 768px) {
-                    .profile-page {
-                        width: 100%;
-                        padding: 0;
-                        padding-top: 4rem;
-                        gap: 10px;
-                    }
+                .watchlist-header h2 {
+                    color: #ffffff;
+                    margin: 0;
+                    font-size: 1.3rem;
                 }
 
                 .tabs {
                     display: flex;
-                    border-bottom: 2px solid #2a2a2a;
-                    margin-bottom: 2rem;
+                    gap: 1rem;
                 }
 
                 .tabs button {
-                    padding: 1rem 2rem;
+                    padding: 0.6rem 1.2rem;
                     background: transparent;
-                    border: none;
+                    border: 1px solid #2a2a2a;
+                    border-radius: 8px;
                     color: #888888;
                     cursor: pointer;
-                    font-size: 1.1rem;
-                    font-weight: 500;
-                    position: relative;
                     transition: all 0.2s ease;
-                }
-
-                .tabs button:hover {
-                    color: #ffffff;
+                    font-size: 0.9rem;
                 }
 
                 .tabs button.active {
-                    color: #9370DB;
-                }
-
-                .tabs button.active::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -2px;
-                    left: 0;
-                    width: 100%;
-                    height: 2px;
                     background: #9370DB;
+                    color: #ffffff;
+                    border-color: #9370DB;
                 }
 
-                .watchlist-table {
+                .table-container {
                     width: 100%;
                     overflow-x: auto;
                 }
 
                 table {
                     width: 100%;
+                    min-width: 800px;
                     border-collapse: collapse;
+                    table-layout: fixed;
                 }
 
-                th {
-                    text-align: left;
+                th, td {
                     padding: 1rem;
-                    color: #888888;
-                    font-weight: 500;
                     border-bottom: 1px solid #2a2a2a;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .poster-cell {
+                    width: 60px;
+                }
+
+                .poster-cell img {
+                    width: 35px;
+                    height: 52px;
+                    object-fit: cover;
+                    border-radius: 4px;
+                }
+
+                .title-cell {
+                    width: 30%;
+                }
+
+                th:nth-child(3), /* Year column */
+                td:nth-child(3) {
+                    width: 100px;
+                }
+
+                th:nth-child(4), /* IMDb column */
+                td:nth-child(4) {
+                    width: 100px;
+                }
+
+                th:nth-child(5), /* Rating column */
+                td:nth-child(5) {
+                    width: 120px;
+                }
+
+                th:nth-child(6), /* Actions column */
+                td:nth-child(6) {
+                    width: 150px;
                 }
 
                 .movie-row {
@@ -849,33 +759,44 @@ const Profile = () => {
                     background: #1a1a1a;
                 }
 
-                td {
-                    padding: 1rem;
-                    border-bottom: 1px solid #2a2a2a;
-                    color: #ffffff;
-                }
-
-                .poster-cell {
-                    width: 60px;
-                }
-
-                .poster-cell img {
-                    width: 45px;
-                    height: 68px;
-                    object-fit: cover;
+                .action-button {
+                    padding: 0.6rem 1rem;
+                    border: none;
                     border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                    transition: all 0.2s ease;
+                    white-space: nowrap;
                 }
 
-                .rating-display {
+                .watch-button {
+                    background: #4CAF50;
+                    color: white;
+                }
+
+                .watch-button:hover {
+                    background: #45a049;
+                }
+
+                .remove-button {
+                    background: #ff4444;
+                    color: white;
+                }
+
+                .remove-button:hover {
+                    background: #ff3333;
+                }
+
+                .empty-state {
+                    text-align: center;
+                    padding: 3rem;
                     color: #888888;
+                    font-style: italic;
                 }
 
                 .slideover-backdrop {
                     position: fixed;
-                    top: 0;
-                    right: 0;
-                    bottom: 0;
-                    left: 0;
+                    inset: 0;
                     background: rgba(0, 0, 0, 0.5);
                     display: flex;
                     justify-content: flex-end;
@@ -887,136 +808,204 @@ const Profile = () => {
                     width: 100%;
                     max-width: 500px;
                     height: 100%;
-                    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
                     animation: slideIn 0.3s ease-out;
-                    display: flex;
-                    flex-direction: column;
+                    overflow-y: auto;
+                    padding: 0;
                 }
 
                 @keyframes slideIn {
-                    from {
-                        transform: translateX(100%);
-                    }
-                    to {
-                        transform: translateX(0);
-                    }
+                    from { transform: translateX(100%); }
+                    to { transform: translateX(0); }
                 }
 
                 .slideover-header {
+                    position: sticky;
+                    top: 0;
+                    background: #141414;
+                    padding: 1.5rem;
+                    border-bottom: 1px solid #2a2a2a;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding: 2rem 2.5rem;
-                    border-bottom: 1px solid #2a2a2a;
-                }
-
-                .slideover-header h3 {
-                    font-size: 1.5rem;
-                    color: #ffffff;
-                    margin: 0;
-                }
-
-                .close-button {
-                    background: transparent;
-                    border: none;
-                    color: #888888;
-                    font-size: 2rem;
-                    cursor: pointer;
-                    padding: 0;
-                    line-height: 1;
-                    transition: color 0.2s ease;
-                }
-
-                .close-button:hover {
-                    color: #ffffff;
+                    z-index: 10;
                 }
 
                 .slideover-content {
-                    flex: 1;
+                    padding: 1.5rem;
+                    height: calc(100% - 70px);
                     overflow-y: auto;
-                    padding: 2.5rem;
-                }
-
-                .movie-details {
-                    display: flex;
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
+                    box-sizing: border-box;
                 }
 
                 .detail-poster {
-                    width: 120px;
-                    height: 180px;
-                    object-fit: cover;
+                    width: 180px;
                     border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
                 }
 
                 .detail-info {
                     flex: 1;
+                    min-width: 0;
                 }
 
-                .year {
+                .movie-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 0.5rem;
+                }
+
+                .year, .imdb-rating {
                     color: #888888;
-                    font-size: 1.1rem;
-                    margin: 0 0 1rem;
+                    font-size: 0.9rem;
+                    margin: 0;
                 }
 
-                .rating-section {
-                    margin-top: 1rem;
-                }
-
-                .rating-section label {
-                    display: block;
+                .movie-meta {
+                    display: flex;
+                    gap: 1rem;
                     color: #888888;
-                    margin-bottom: 0.8rem;
-                    font-size: 1.1rem;
+                    font-size: 0.9rem;
+                    margin-bottom: 1rem;
+                    flex-wrap: wrap;
+                }
+
+                .movie-plot {
+                    color: #e0e0e0;
+                    font-size: 0.95rem;
+                    line-height: 1.6;
+                    margin-bottom: 1rem;
+                }
+
+                .movie-credits {
+                    color: #888888;
+                    font-size: 0.9rem;
+                }
+
+                .movie-credits p {
+                    margin: 0.5rem 0;
+                }
+
+                .movie-credits strong {
+                    color: #ffffff;
+                    margin-right: 0.5rem;
+                }
+
+                .rating-select {
+                    width: 100%;
+                    padding: 0.8rem;
+                    background: #1a1a1a;
+                    border: 1px solid #2a2a2a;
+                    border-radius: 8px;
+                    color: #ffffff;
+                    margin-top: 0.5rem;
                 }
 
                 .notes-section {
-                    margin-top: 2rem;
+                    border-top: 1px solid #2a2a2a;
+                    padding-top: 1.5rem;
+                    margin-top: 1.5rem;
+                    width: 100%;
+                    box-sizing: border-box;
                 }
 
-                .notes-section label {
-                    display: block;
+                .notes-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1rem;
+                    width: 100%;
+                }
+
+                .notes-header label {
+                    color: #ffffff;
+                    font-size: 1rem;
+                    font-weight: 500;
+                }
+
+                .unsaved-indicator {
                     color: #888888;
-                    margin-bottom: 0.8rem;
-                    font-size: 1.1rem;
+                    font-size: 0.9rem;
+                    font-style: italic;
                 }
 
                 .notes-input {
                     width: 100%;
                     min-height: 120px;
                     padding: 1rem;
-                    background: #2a2a2a;
-                    color: white;
-                    border: none;
-                    border-radius: 10px;
+                    background: #1a1a1a;
+                    border: 1px solid #2a2a2a;
+                    border-radius: 8px;
+                    color: #ffffff;
+                    font-size: 0.95rem;
+                    font-family: 'Open Sans', sans-serif;
                     resize: vertical;
-                    font-family: inherit;
-                    font-size: 1rem;
+                    margin-bottom: 1rem;
+                    box-sizing: border-box;
                     line-height: 1.5;
-                    transition: all 0.2s ease;
                 }
 
                 .notes-input:focus {
                     outline: none;
-                    background: #333333;
-                    box-shadow: 0 0 0 2px rgba(147, 112, 219, 0.3);
+                    border-color: #9370DB;
+                    box-shadow: 0 0 0 2px rgba(147, 112, 219, 0.1);
+                }
+
+                .save-notes-button {
+                    width: 100%;
+                    padding: 0.8rem;
+                    background: #2a2a2a;
+                    color: #888888;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: not-allowed;
+                    opacity: 0.7;
+                    font-size: 0.95rem;
+                    font-family: 'Open Sans', sans-serif;
+                    transition: all 0.2s ease;
+                }
+
+                .save-notes-button.has-changes {
+                    background: #9370DB;
+                    color: white;
+                    cursor: pointer;
+                    opacity: 1;
+                }
+
+                .save-notes-button.has-changes:hover {
+                    background: #7B68EE;
+                    transform: translateY(-1px);
                 }
 
                 @media (max-width: 1024px) {
-                    .slideover-panel {
-                        max-width: 400px;
+                    .profile-content {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .search-widget {
+                        position: relative;
+                        top: 0;
+                        max-height: 500px;
+                    }
+
+                    table {
+                        min-width: 700px;
                     }
                 }
 
-                @media (max-width: 640px) {
-                    .slideover-panel {
-                        max-width: none;
+                @media (max-width: 768px) {
+                    .profile-container {
+                        padding: 2rem 1rem 1rem 1rem;
                     }
 
-                    .tabs button {
-                        padding: 0.8rem 1.5rem;
-                        font-size: 1rem;
+                    .profile-info {
+                        flex-direction: column;
+                        text-align: center;
+                    }
+
+                    .watchlist-header {
+                        flex-direction: column;
+                        gap: 1rem;
                     }
 
                     th, td {
@@ -1024,147 +1013,26 @@ const Profile = () => {
                     }
                 }
 
-                .notes-header {
+                .loading-state,
+                .error-state {
                     display: flex;
-                    justify-content: space-between;
+                    justify-content: center;
                     align-items: center;
-                    margin-bottom: 0.8rem;
-                }
-
-                .unsaved-indicator {
-                    font-size: 0.9rem;
-                    color: #ffd700;
-                    font-style: italic;
-                }
-
-                .save-notes-button {
-                    margin-top: 1rem;
-                    padding: 0.8rem 1.5rem;
-                    background: #2a2a2a;
+                    min-height: 200px;
+                    font-size: 1.1rem;
                     color: #888888;
-                    border: none;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    font-size: 1rem;
-                    transition: all 0.2s ease;
-                    width: 100%;
-                }
-
-                .save-notes-button.has-changes {
-                    background: #9370DB;
-                    color: white;
-                }
-
-                .save-notes-button:hover:not(:disabled) {
-                    transform: translateY(-1px);
-                    box-shadow: 0 2px 8px rgba(147, 112, 219, 0.2);
-                }
-
-                .save-notes-button:disabled {
-                    cursor: not-allowed;
-                    opacity: 0.5;
-                }
-
-                .create-review {
-                    border-top: 1px solid #2a2a2a;
-                    padding-top: 15px;
-                    min-height: 150px;
-                }
-
-                .create-review h3 {
-                    color: #ffffff;
-                    font-size: 1.2rem;
-                    margin-bottom: 12px;
-                    font-weight: 600;
-                }
-
-                .review-form {
-                    width: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.75rem;
-                }
-
-                .review-title-input {
-                    width: 100%;
-                    min-height: 45px;
-                    max-height: 100px;
-                    padding: 12px 14px;
-                    background: #1a1a1a;
+                    text-align: center;
+                    padding: 2rem;
+                    background: #141414;
+                    border-radius: 16px;
                     border: 1px solid #2a2a2a;
-                    border-radius: 8px;
-                    color: #ffffff;
-                    font-size: 1rem;
-                    font-family: inherit;
-                    resize: vertical;
-                    transition: all 0.2s ease;
+                    margin: 2rem auto;
+                    max-width: 400px;
                 }
 
-                .review-content-input {
-                    width: 100%;
-                    min-height: 120px;
-                    padding: 12px 14px;
-                    background: #1a1a1a;
-                    border: 1px solid #2a2a2a;
-                    border-radius: 8px;
-                    color: #ffffff;
-                    font-size: 1rem;
-                    font-family: inherit;
-                    resize: vertical;
-                    line-height: 1.5;
-                    transition: all 0.2s ease;
-                }
-
-                .review-title-input:focus,
-                .review-content-input:focus {
-                    outline: none;
-                    border-color: #9370DB;
-                    background: #242424;
-                    box-shadow: 0 0 0 2px rgba(147, 112, 219, 0.1);
-                }
-
-                .review-title-input::placeholder,
-                .review-content-input::placeholder {
-                    color: #666666;
-                }
-
-                .submit-review {
-                    background: #9370DB;
-                    color: #ffffff;
-                    border: none;
-                    padding: 12px 20px;
-                    border-radius: 8px;
-                    font-size: 1rem;
-                    cursor: pointer;
-                    font-family: inherit;
-                    transition: all 0.2s ease;
-                    font-weight: 500;
-                    margin-top: 0.5rem;
-                }
-
-                .submit-review:hover:not(:disabled) {
-                    background: #8A5CD1;
-                    transform: translateY(-1px);
-                    box-shadow: 0 4px 12px rgba(147, 112, 219, 0.2);
-                }
-
-                .submit-review:disabled {
-                    background: #4a4a4a;
-                    cursor: not-allowed;
-                    opacity: 0.7;
-                }
-
-                .review-form-group {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-                }
-
-                .review-form-label {
-                    color: #888888;
-                    font-size: 0.9rem;
-                    font-weight: 500;
-                    margin-left: 2px;
+                .error-state {
+                    color: #ff4444;
+                    border-color: #ff4444;
                 }
             `}</style>
         </div>

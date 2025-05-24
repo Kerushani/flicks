@@ -98,10 +98,11 @@ class SearchOMDbView(APIView):
                     status=status.HTTP_200_OK
                 )
             
-            # Get detailed info for each movie including rating
+            # Get detailed info for first 10 movies
+            detailed_results = []
             if 'Search' in search_data:
-                detailed_results = []
                 for movie in search_data['Search'][:10]:  # Limit to first 10 results
+                    # Get additional movie details including rating
                     detail_response = requests.get(
                         'http://www.omdbapi.com/',
                         params={
@@ -112,12 +113,21 @@ class SearchOMDbView(APIView):
                     )
                     if detail_response.status_code == 200:
                         detail_data = detail_response.json()
-                        movie['imdbRating'] = detail_data.get('imdbRating', 'N/A')
-                    detailed_results.append(movie)
+                        # Only include movies with posters and required fields
+                        if (detail_data.get('Poster', 'N/A') != 'N/A' and 
+                            detail_data.get('Title') and 
+                            detail_data.get('Year')):
+                            detailed_results.append({
+                                'imdbID': detail_data['imdbID'],
+                                'Title': detail_data['Title'],
+                                'Year': detail_data['Year'],
+                                'Poster': detail_data['Poster'],
+                                'imdbRating': detail_data.get('imdbRating', 'N/A')
+                            })
+                            if len(detailed_results) >= 10:  # Ensure we never exceed 10 results
+                                break
                 
-                search_data['Search'] = detailed_results
-                
-            return Response(search_data)
+            return Response({'Search': detailed_results})
             
         except requests.Timeout:
             return Response(

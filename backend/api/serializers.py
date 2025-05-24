@@ -72,4 +72,10 @@ class WatchlistItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = WatchlistItem
         fields = ['id', 'imdb_id', 'title', 'year', 'poster', 'added_at', 'watched', 'rating', 'notes', 'imdb_rating']
-        read_only_fields = ['added_at']
+        read_only_fields = ['id', 'added_at']
+        extra_kwargs = {
+            'imdb_rating': {'required': False},
+            'notes': {'required': False},
+            'rating': {'required': False},
+            'watched': {'required': False}
+        }
