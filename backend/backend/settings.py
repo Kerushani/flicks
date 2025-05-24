@@ -113,8 +113,6 @@ DATABASES = {
     )
 }
 
-# The GitHub Actions workflow will use the same DB_URL environment variable
-# which will be set to: postgres://postgres:postgres@localhost:5432/github_actions
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
