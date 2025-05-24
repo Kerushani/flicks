@@ -1,6 +1,6 @@
 # Flicks 
 
-A movie reflection and review app.
+A movie reflection app.
 
 **Live Demo**: [https://reviews-app123.vercel.app/register](https://reviews-app123.vercel.app/register)
 
