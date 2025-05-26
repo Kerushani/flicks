@@ -13,9 +13,9 @@ Note: The backend is hosted on Render, which may result in a short delay (a few 
 ## Tech Stack
 
 ### Frontend
-- **React.js**
-- **Axios**
+- React.js
+- Axios
 
 ### Backend
-- **Django** + **Django REST Framework**
-- **PostgreSQL**
+- Django
+- PostgreSQL
